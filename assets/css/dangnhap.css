@@ -1,0 +1,75 @@
+/* ================= DANG NHAP PAGE ================= */
+
+.login-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: aliceblue;
+}
+
+.login-container {
+    width: 450px;
+    border: 1px solid #ccc;
+    padding: 30px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0f3a63;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.btn-dangnhap {
+    width: 100%;
+    background-color: orangered;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-dangnhap:hover {
+    background: #716f6f;
+}
+
+.login-container p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-container a {
+    color: orangered;
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 540px) {
+    .login-container {
+        width: 100%;
+        padding: 20px;
+    }
+}

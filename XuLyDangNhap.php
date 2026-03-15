@@ -1,45 +1,54 @@
 <?php
-session_start(); // Bắt đầu phiên làm việc để ghi nhớ người dùng đã đăng nhập
-require_once 'Config.php'; // Gọi file kết nối SQL Server của bạn
+session_start();
+require_once 'Config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy dữ liệu từ form Dangnhap.php gửi sang
-    $emailInput = $_POST['email'] ?? '';
+    $emailInput = $_POST['email']    ?? '';
     $passInput  = $_POST['password'] ?? '';
 
     if (empty($emailInput) || empty($passInput)) {
-        die("Vui lòng nhập đầy đủ Email và Mật khẩu!");
+        header("Location: Dangnhap.php?error=trong");
+        exit();
     }
 
+    // ✅ Kiểm tra cứng tài khoản Admin
+    if ($emailInput === 'admin@bookstore.com' && $passInput === '123456') {
+        $_SESSION['user_id']   = 0;
+        $_SESSION['user_name'] = 'Admin';
+        $_SESSION['user_role'] = 'Admin';
+        header("Location: AdminWelcome.php");
+        exit();
+    }
+
+    // Tài khoản thường → kiểm tra trong DB
     try {
-        // 1. Tìm tài khoản trong bảng users theo Email
-        // Lưu ý: Tên cột phải là FullName theo ảnh image_7dd623.png của bạn
-        $sql = "SELECT UserID, FullName, [Password], [Role] FROM users WHERE Email = ?";
+        $sql  = "SELECT UserID, FullName, [Password], [Role] FROM Users WHERE Email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$emailInput]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // 2. Kiểm tra tài khoản có tồn tại và mật khẩu có khớp không
-        if ($user && $user['Password'] === $passInput) {
-            // Đăng nhập thành công! Lưu thông tin vào Session
+        if ($user && password_verify($passInput, $user['Password'])) {
             $_SESSION['user_id']   = $user['UserID'];
             $_SESSION['user_name'] = $user['FullName'];
             $_SESSION['user_role'] = $user['Role'];
 
-            echo "<h2>Đăng nhập thành công!</h2>";
-            echo "Chào mừng <strong>" . $user['FullName'] . "</strong> quay trở lại.";
-            // Sau này bạn có thể dùng header("Location: TrangChu.php"); để chuyển trang
-            header("Location: index.php");
-            exit(); // Dừng script sau khi chuyển trang
+            if ($user['Role'] === 'Admin') {
+                header("Location: AdminWelcome.php");
+            } else {
+                header("Location: index.php");
+            }
+            exit();
+
         } else {
-            // Nếu không tìm thấy user hoặc mật khẩu sai
-            echo "Sai Email hoặc Mật khẩu. <a href='Dangnhap.php'>Thử lại</a>";
+            header("Location: Dangnhap.php?error=sai_tai_khoan");
+            exit();
         }
 
     } catch (PDOException $e) {
         die("Lỗi hệ thống: " . $e->getMessage());
     }
 } else {
-    echo "Truy cập không hợp lệ.";
+    header("Location: Dangnhap.php");
+    exit();
 }
 ?>
