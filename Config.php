@@ -1,12 +1,12 @@
 <?php
-$serverName = "DESKTOP-5I99H1C";
-$database   = "bookshop";
-$uid        = "root";
-$pwd        = "";
+$host     = "localhost";
+$database = "BookShop";
+$uid      = "root";
+$pwd      = "";        // WAMP mặc định để trống
 
 try {
     $conn = new PDO(
-        "mysql:host=localhost;Database=$database;charset=utf8",
+        "mysql:host=$host;dbname=$database;charset=utf8",
         $uid,
         $pwd
     );
