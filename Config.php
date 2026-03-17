@@ -1,12 +1,12 @@
 <?php
 $serverName = "DESKTOP-5I99H1C";
-$database   = "BookShop";
-$uid        = "Theoythick1";
-$pwd        = "123456";
+$database   = "bookshop";
+$uid        = "root";
+$pwd        = "";
 
 try {
     $conn = new PDO(
-        "sqlsrv:server=$serverName;Database=$database",
+        "mysql:host=localhost;Database=$database;charset=utf8",
         $uid,
         $pwd
     );

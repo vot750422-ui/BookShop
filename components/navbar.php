@@ -16,7 +16,9 @@
 
     <div class="nav-top">
         <div class="logo">
-            <img src="./assets/images/logo.png" alt="logo">
+            <a href="index.php">
+                <img src="./assets/images/logo.png" alt="logo">
+            </a>
             <span>SAKURA BOOK</span>
         </div>
         <ul class="menu">

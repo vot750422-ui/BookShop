@@ -11,18 +11,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // ✅ Kiểm tra cứng tài khoản Admin
+    // Kiểm tra cứng tài khoản Admin
     if ($emailInput === 'admin@bookstore.com' && $passInput === '123456') {
         $_SESSION['user_id']   = 0;
         $_SESSION['user_name'] = 'Admin';
         $_SESSION['user_role'] = 'Admin';
-        header("Location: AdminWelcome.php");
+        header("Location: Admin.php");
         exit();
     }
 
     // Tài khoản thường → kiểm tra trong DB
     try {
-        $sql  = "SELECT UserID, FullName, [Password], [Role] FROM Users WHERE Email = ?";
+        $sql  = "SELECT UserID, FullName, `Password`, `Role` FROM Users WHERE Email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$emailInput]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);

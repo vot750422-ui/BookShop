@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // SQL Server dùng []  
-        $sql = "INSERT INTO Users (FullName, Email, BirthDate, [Password], [Address], Phone, [Role])
+        $sql = "INSERT INTO Users (FullName, Email, BirthDate, `Password`, Address, Phone, `Role`)
                 VALUES (?, ?, ?, ?, ?, ?, 'Customer')";
 
         $stmt = $conn->prepare($sql);

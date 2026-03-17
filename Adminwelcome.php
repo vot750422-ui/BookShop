@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Chỉ admin mới vào được trang này
+
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     header("Location: Dangnhap.php");
     exit();

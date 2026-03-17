@@ -31,8 +31,9 @@ try {
      *   Orders(OrderID INT IDENTITY PK, UserID INT FK, TongTien DECIMAL, NgayDat DATETIME, TrangThai NVARCHAR)
      * Nếu chưa có bảng, sinh viên cần chạy script tạo bảng trước.
      */
-    $sql = "INSERT INTO Orders (UserID, TongTien, NgayDat, TrangThai) 
-            VALUES (?, ?, GETDATE(), N'Đã thanh toán')";
+    $sql  = "UPDATE Books
+                     SET Title=?, Author=?, TheLoai=?, Price=?, Stock=?, ImageURL=?, Description=?
+                     WHERE BookID=?";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([$userID, $tongTien]);
