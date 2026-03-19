@@ -1,0 +1,120 @@
+/* ===== BOX ===== */
+.order-box {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #c9a96e;
+}
+
+/* ===== TABLE ===== */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.order-table th {
+  text-align: left;
+  padding: 12px 10px;
+  background: #f8f6f2;
+  font-size: 13px;
+  color: #2c1a0e;
+  border-bottom: 2px solid #eee;
+}
+
+.order-table td {
+  padding: 12px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+/* hover nhẹ cho đẹp */
+.order-table tbody tr:hover {
+  background: #faf9f7;
+}
+
+/* ===== FORM TRONG TABLE ===== */
+.order-table form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== SELECT ===== */
+.order-table select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 13px;
+  outline: none;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.order-table select:focus {
+  border-color: #c9a96e;
+}
+
+/* ===== BUTTON ===== */
+.btn-order {
+  background: #2c1a0e;
+  color: #f0e6d3;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-order:hover {
+  background: #c9a96e;
+}
+
+/* ===== STATUS ===== */
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Chờ xử lý */
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Đang giao */
+.status-shipping {
+  background: #cce5ff;
+  color: #004085;
+}
+
+/* Đã giao */
+.status-done {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Đã hủy */
+.status-cancel {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .order-table th,
+  .order-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .order-table form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -45,15 +45,18 @@ if (isset($_GET['sua'])) {
 <div class="admin-navbar">
     <div class="admin-navbar-left">
         <span class="admin-logo"> ADMIN</span>
-        <span class="admin-user">Xin chào, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong></span>
+        <span class="admin-user">
+            Xin chào, 
+            <strong><?= htmlspecialchars($_SESSION['user_name'] ?? 'Admin') ?></strong>
+        </span>
     </div>
     <ul class="admin-menu">
-        <li><a href="admin.php"> Dashboard</a></li>
-        <li><a href="admin_sanpham.php" class="active"> Sản phẩm</a></li>
-        <li><a href="admin_khachhang.php"> Khách hàng</a></li>
-        <li><a href="admin_donhang.php"> Đơn hàng</a></li>
-        <li><a href="index.php"> Trang chủ</a></li>
-        <li><a href="logout.php" class="btn-logout"> Đăng xuất</a></li>
+        <li><a href="admin.php">Dashboard</a></li>
+        <li><a href="admin_sanpham.php" class="active">Quản lý sản phẩm</a></li>
+        <li><a href="admin_khachhang.php">Quản lý khách hàng</a></li>
+        <li><a href="admin_donhang.php">Quản lý đơn hàng</a></li>
+        <li><a href="index.php">Trang chủ</a></li>
+        <li><a href="logout.php" class="btn-logout">Đăng xuất</a></li>
     </ul>
 </div>
 

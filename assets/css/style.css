@@ -347,16 +347,3 @@ body {
     padding: 10px 20px;
   }
 }
-/* ================= Giỏ hàng ================= */
-a.cart {
-  color: #f0e6d3;
-  font-weight: 500;
-  text-decoration: none !important; /* ← bỏ gạch chân */
-  position: relative;
-  transition: color 0.2s;
-}
-
-a.cart:hover {
-  color: #c9a96e;
-  text-decoration: none; /* ← giữ không gạch chân khi hover */
-}

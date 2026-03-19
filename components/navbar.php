@@ -96,17 +96,7 @@
             <button>Tìm kiếm</button>
         </div>
 
-        <a href="GioHang.php" class="cart"> Giỏ hàng <span class="cart-count">
-    <?php
-    $totalItems = 0;
-    if (isset($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as $item) {
-            $totalItems += $item['slg'];
-        }
-    }
-    echo $totalItems;
-    ?>
-</span></a>
+        <div class="cart"> Giỏ hàng <span class="cart-count">0</span></div>
     </div>
 </nav>
 
