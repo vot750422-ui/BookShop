@@ -1,52 +1,76 @@
 <?php
 session_start();
-require_once 'Config.php'; // Kết nối PDO dùng chung toàn hệ thống
+require_once 'Config.php';
 
-// Bảo vệ: chỉ cho phép POST request
+// Chỉ cho phép POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: index.php");
     exit();
 }
 
-// Bảo vệ: phải đăng nhập mới được thanh toán
-if (!isset($_SESSION['user_id'])) {
-    header("Location: Dangnhap.php");
+// Kiểm tra giỏ hàng
+$cart = $_SESSION['cart'] ?? [];
+if (empty($cart)) {
+    header("Location: GioHang.php");
     exit();
 }
 
-// Lấy dữ liệu từ form Thanhtoan.php
-$userID   = $_SESSION['user_id'];               // Lấy từ Session cho an toàn
-$tongTien = $_POST['tongTien'] ?? 0;
+// Lấy thông tin giao hàng từ form
+$userID    = $_POST['userID']    ?? null;   // NULL nếu khách vãng lai
+$tongTien  = (int)($_POST['tongTien'] ?? 0);
+$hoTen     = trim($_POST['HoTen']     ?? '');
+$phone     = trim($_POST['Phone']     ?? '');
+$email     = trim($_POST['Email']     ?? '');
+$diaChiDay = trim($_POST['DiaChiDay'] ?? '');
+$phuongXa  = trim($_POST['PhuongXa']  ?? '');
+$quanHuyen = trim($_POST['QuanHuyen'] ?? '');
+$tinhTP    = trim($_POST['TinhTP']    ?? '');
+$ghiChu    = trim($_POST['GhiChu']    ?? '');
 
-// Kiểm tra dữ liệu hợp lệ
+// Kiểm tra dữ liệu bắt buộc
+if (empty($hoTen) || empty($phone) || empty($diaChiDay) ||
+    empty($phuongXa) || empty($quanHuyen) || empty($tinhTP)) {
+    header("Location: Thanhtoan.php?error=Vui lòng điền đầy đủ thông tin giao hàng!");
+    exit();
+}
+
 if ($tongTien <= 0) {
     header("Location: Thanhtoan.php?error=Tổng tiền không hợp lệ!");
     exit();
 }
 
 try {
-    /*
-     * Lưu đơn hàng vào database.
-     * Ghi chú: Bảng Orders cần được tạo trước với cấu trúc:
-     *   Orders(OrderID INT IDENTITY PK, UserID INT FK, TongTien DECIMAL, NgayDat DATETIME, TrangThai NVARCHAR)
-     * Nếu chưa có bảng, sinh viên cần chạy script tạo bảng trước.
-     */
-    $sql  = "UPDATE Books
-                     SET Title=?, Author=?, TheLoai=?, Price=?, Stock=?, ImageURL=?, Description=?
-                     WHERE BookID=?";
+    // ✅ INSERT đúng vào bảng Orders với đầy đủ thông tin giao hàng
+    $sql = "INSERT INTO Orders
+                (UserID, TongTien, NgayDat, TrangThai,
+                 HoTen, Email, Phone, DiaChiDay, PhuongXa, QuanHuyen, TinhTP, GhiChu)
+            VALUES
+                (?, ?, NOW(), 'Chờ xác nhận',
+                 ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$userID, $tongTien]);
+    $stmt->execute([
+        $userID ?: null,   // NULL nếu khách vãng lai
+        $tongTien,
+        $hoTen,
+        $email,
+        $phone,
+        $diaChiDay,
+        $phuongXa,
+        $quanHuyen,
+        $tinhTP,
+        $ghiChu,
+    ]);
 
-    // Lấy ID đơn hàng vừa tạo
     $orderID = $conn->lastInsertId();
 
-    // Chuyển đến trang thành công
+    // ✅ Xoá giỏ hàng sau khi đặt hàng thành công
+    $_SESSION['cart'] = [];
+
     header("Location: ThanhToanThanhCong.php?orderID=" . $orderID);
     exit();
 
 } catch (PDOException $e) {
-    // Nếu bảng Orders chưa tồn tại hoặc lỗi khác, thông báo rõ ràng
     $errorMsg = urlencode("Lỗi hệ thống: " . $e->getMessage());
     header("Location: Thanhtoan.php?error=" . $errorMsg);
     exit();

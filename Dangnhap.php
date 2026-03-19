@@ -45,6 +45,7 @@ if (isset($_SESSION['user_name'])) {
 
 <!-- Footer nhúng từ component -->
 <?php include 'components/footer.html'; ?>
+<?php include 'components/alertpopup.php'; ?>
 
 
 

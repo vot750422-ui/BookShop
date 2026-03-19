@@ -163,6 +163,7 @@ require_once 'Config.php';
 </main>
 
 <?php include 'components/footer.html'; ?>
+<?php include 'components/alertpopup.php'; ?>
 
 </body>
 </html>

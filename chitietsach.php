@@ -173,7 +173,7 @@ $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
 </div>
 
 <?php include 'components/footer.html'; ?>
-
+<?php include 'components/alertpopup.php'; ?>
 <script>
 function changeQty(delta) {
     const input = document.getElementById('qty');

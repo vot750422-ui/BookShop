@@ -35,6 +35,7 @@
 
 <!-- Footer nhúng từ component -->
 <?php include 'components/footer.html'; ?>
+<?php include 'components/alertpopup.php'; ?>
 
 
 

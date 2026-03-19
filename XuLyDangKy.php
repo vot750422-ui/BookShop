@@ -32,9 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$fullName, $email, $birthDate, $hashedPassword, $address, $phone]);
 
         echo "<script>
-            alert('Đăng ký thành công! Vui lòng đăng nhập.');
-            window.location.href = 'Dangnhap.php';
-        </script>";
+    showPopup('Đăng ký thành công! Vui lòng đăng nhập.', 'success', () => {
+        window.location.href = 'Dangnhap.php';
+    });
+</script>";
         exit();
 
     } catch (PDOException $e) {
