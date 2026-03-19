@@ -8,65 +8,36 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
-// Kiểm tra giỏ hàng
-$cart = $_SESSION['cart'] ?? [];
-if (empty($cart)) {
-    header("Location: GioHang.php");
+// Phải login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Dangnhap.php");
     exit();
 }
 
-// Lấy thông tin giao hàng từ form
-$userID    = $_POST['userID']    ?? null;   // NULL nếu khách vãng lai
-$tongTien  = (int)($_POST['tongTien'] ?? 0);
-$hoTen     = trim($_POST['HoTen']     ?? '');
-$phone     = trim($_POST['Phone']     ?? '');
-$email     = trim($_POST['Email']     ?? '');
-$diaChiDay = trim($_POST['DiaChiDay'] ?? '');
-$phuongXa  = trim($_POST['PhuongXa']  ?? '');
-$quanHuyen = trim($_POST['QuanHuyen'] ?? '');
-$tinhTP    = trim($_POST['TinhTP']    ?? '');
-$ghiChu    = trim($_POST['GhiChu']    ?? '');
+$userID   = $_SESSION['user_id'];
+$tongTien = $_POST['tongTien'] ?? 0;
 
-// Kiểm tra dữ liệu bắt buộc
-if (empty($hoTen) || empty($phone) || empty($diaChiDay) ||
-    empty($phuongXa) || empty($quanHuyen) || empty($tinhTP)) {
-    header("Location: Thanhtoan.php?error=Vui lòng điền đầy đủ thông tin giao hàng!");
-    exit();
-}
-
+// ✅ VALIDATE TRƯỚC
 if ($tongTien <= 0) {
     header("Location: Thanhtoan.php?error=Tổng tiền không hợp lệ!");
     exit();
 }
 
 try {
-    // ✅ INSERT đúng vào bảng Orders với đầy đủ thông tin giao hàng
-    $sql = "INSERT INTO Orders
-                (UserID, TongTien, NgayDat, TrangThai,
-                 HoTen, Email, Phone, DiaChiDay, PhuongXa, QuanHuyen, TinhTP, GhiChu)
-            VALUES
-                (?, ?, NOW(), 'Chờ xác nhận',
-                 ?, ?, ?, ?, ?, ?, ?, ?)";
-
+    // ✅ INSERT ĐƠN HÀNG
+    $sql = "INSERT INTO Orders (UserID, TongTien, TrangThai)
+            VALUES (?, ?, 'Đã thanh toán')";
+    
     $stmt = $conn->prepare($sql);
-    $stmt->execute([
-        $userID ?: null,   // NULL nếu khách vãng lai
-        $tongTien,
-        $hoTen,
-        $email,
-        $phone,
-        $diaChiDay,
-        $phuongXa,
-        $quanHuyen,
-        $tinhTP,
-        $ghiChu,
-    ]);
+    $stmt->execute([$userID, $tongTien]);
 
+    // ✅ LẤY ID
     $orderID = $conn->lastInsertId();
 
-    // ✅ Xoá giỏ hàng sau khi đặt hàng thành công
-    $_SESSION['cart'] = [];
+    // ✅ (optional) xóa giỏ hàng
+    unset($_SESSION['cart']);
 
+    // chuyển trang
     header("Location: ThanhToanThanhCong.php?orderID=" . $orderID);
     exit();
 
