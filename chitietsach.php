@@ -322,15 +322,16 @@ $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
         <!-- Nút hành động -->
         <div class="actions">
             <form action="XuLyGioHang.php" method="POST">
-                <input type="hidden" name="bookID" value="<?php echo $book['BookID']; ?>">
+                <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
                 <button type="submit" class="cart-btn"> Thêm vào giỏ hàng</button>
             </form>
             <form action="XuLyGioHang.php" method="POST">
                 <input type="hidden" name="bookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
-                <button type="submit" class="buy-btn"
-                    formaction="Thanhtoan.php"> Mua ngay</button>
+                <button type="submit" name="redirect" value="checkout" class="buy-btn">
+            Mua ngay
+        </button>
             </form>
         </div>
     </div>

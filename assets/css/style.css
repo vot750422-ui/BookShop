@@ -122,7 +122,11 @@ body {
 
 /* ================= NAVBAR ================= */
 .navbar {
-  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Đảm bảo navbar luôn nằm trên cùng */
+  background: #fff; /* Tránh bị trong suốt khi cuộn đè lên nội dung khác */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ tạo điểm nhấn */
 }
 
 /* ===== TOP BAR ===== */
@@ -172,13 +176,7 @@ body {
 }
 
 .logo img {
-  height: 110px;
-}
-
-.logo span {
-  font-size: 22px;
-  font-weight: bold;
-  color: #7b4f1e;
+  height: 180px;
 }
 
 /* Menu */

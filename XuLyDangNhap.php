@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
 
         } else {
-            header("Location: Dangnhap.php?error=sai_tai_khoan");
+            header("Location: Dangnhap.php?error=Thông tin đăng nhập không chính xác.");
             exit();
         }
 

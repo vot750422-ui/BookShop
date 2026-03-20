@@ -19,7 +19,6 @@
             <a href="index.php">
                 <img src="./assets/images/logo.png" alt="logo">
             </a>
-            <span>SAKURA BOOK</span>
         </div>
         <ul class="menu">
             <li><a href="index.php">Trang chủ</a></li>
@@ -96,7 +95,9 @@
             <button>Tìm kiếm</button>
         </div>
 
-        <div class="cart"> Giỏ hàng <span class="cart-count">0</span></div>
+        <div class="cart" onclick="window.location.href='GioHang.php';" style="cursor: pointer;">
+    🛒 Giỏ hàng <span class="cart-count">0</span>
+</div>
     </div>
 </nav>
 
