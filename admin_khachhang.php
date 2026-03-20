@@ -8,8 +8,8 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     exit();
 }
 
-// lấy danh sách user (không lấy admin)
-$stmt = $conn->query("SELECT * FROM Users WHERE Role != 'Admin'");
+// lấy danh sách toàn bộ user (không lấy admin)
+$stmt = $conn->query("SELECT * FROM Users WHERE Role != 'Admin' ORDER BY UserID DESC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -54,21 +54,38 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Tên</th>
                     <th>Email</th>
                     <th>Điện thoại</th>
-                    <th>Ngày sinh</th>
+                    <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
             <?php foreach ($users as $u): ?>
+                <?php 
+                    // Mặc định là 1 (hoạt động) nếu cột này bị null
+                    $trangThai = $u['TrangThai'] ?? 1; 
+                ?>
                 <tr>
                     <td><?= htmlspecialchars($u['UserID']) ?></td>
                     <td><?= htmlspecialchars($u['FullName']) ?></td>
                     <td><?= htmlspecialchars($u['Email']) ?></td>
                     <td><?= htmlspecialchars($u['Phone']) ?></td>
-                    <td><?= htmlspecialchars($u['BirthDate'] ?? '') ?></td>
+                    
+                    <!-- Cột hiển thị trạng thái -->
                     <td>
-                        <a href="xoa_user.php?id=<?= $u['UserID'] ?>" class="btn-customer"
-                           onclick="return confirm('Xóa user này?')">Xóa</a>
+                        <?php if ($trangThai == 1): ?>
+                            <span style="color: green; font-weight: bold;">Hoạt động</span>
+                        <?php else: ?>
+                            <span style="color: red; font-weight: bold;">Đã khóa</span>
+                        <?php endif; ?>
+                    </td>
+
+                    <!-- Nút hành động thay đổi theo trạng thái -->
+                    <td>
+                        <?php if ($trangThai == 1): ?>
+                            <a href="admin_khoakhachhang.php?id=<?= $u['UserID'] ?>&action=lock" class="btn-customer" style="background: #e74c3c; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px;" onclick="return confirm('Bạn có chắc chắn muốn khóa tài khoản này?')">Khóa</a>
+                        <?php else: ?>
+                            <a href="admin_khoakhachhang.php?id=<?= $u['UserID'] ?>&action=unlock" class="btn-customer" style="background: #2ecc71; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px;" onclick="return confirm('Mở khóa cho tài khoản này?')">Mở khóa</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

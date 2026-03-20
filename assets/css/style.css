@@ -15,6 +15,9 @@ body {
   display: flex;
   flex-direction: column;
 }
+body {
+  padding-top: 230px; /* Bạn có thể tăng/giảm số này tùy theo chiều cao thực tế của thanh navbar */
+}
 
 .main-content {
   flex: 1;
@@ -122,11 +125,13 @@ body {
 
 /* ================= NAVBAR ================= */
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000; /* Đảm bảo navbar luôn nằm trên cùng */
-  background: #fff; /* Tránh bị trong suốt khi cuộn đè lên nội dung khác */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ tạo điểm nhấn */
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Thêm bóng đổ để phân cách */
 }
 
 /* ===== TOP BAR ===== */
@@ -176,7 +181,7 @@ body {
 }
 
 .logo img {
-  height: 180px;
+  height: 115px;
 }
 
 /* Menu */

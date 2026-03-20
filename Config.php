@@ -1,8 +1,8 @@
 <?php
 $host     = "localhost";
-$database = "BookShop";
-$uid      = "root";
-$pwd      = "";        // WAMP mặc định để trống
+$database = "sakurabo1_db";
+$uid      = "admin";
+$pwd      = "Trong@6419423";        // WAMP mặc định để trống
 
 try {
     $conn = new PDO(

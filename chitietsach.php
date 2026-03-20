@@ -26,6 +26,22 @@ try {
 }
 
 $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
+$theLoaiMap = [
+    'tieu-thuyet'     => 'Tiểu Thuyết',
+    'truyen-ngan'     => 'Truyện Ngắn',
+    'co-dien'         => 'Văn Học Cổ Điển',
+    'kinh-di'         => 'Kinh Dị',
+    'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
+    'ky-nang-song'    => 'Kỹ Năng Sống',
+    'but-bi'          => 'Bút Bi',
+    'but-chi'         => 'Bút Chì',
+    'but-da-quang'    => 'Bút Dạ Quang',
+    'vo-o-ly'         => 'Vở Ô Li',
+    'so-tay'          => 'Sổ Tay',
+    'giay-note'       => 'Giấy Note',
+];
+$maTheLoai = $book['TheLoai'] ?? '';
+$tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -262,17 +278,41 @@ $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
 <body>
 
 <?php include 'components/navbar.php'; ?>
-
 <!-- Breadcrumb -->
+<?php
+// 1. Khai báo dữ liệu TRƯỚC khi in ra HTML
+$theLoaiMap = [
+    'tieu-thuyet'     => 'Tiểu Thuyết',
+    'truyen-ngan'     => 'Truyện Ngắn',
+    'co-dien'         => 'Văn Học Cổ Điển',
+    'kinh-di'         => 'Kinh Dị',
+    'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
+    'ky-nang-song'    => 'Kỹ Năng Sống',
+    'but-bi'          => 'Bút Bi',
+    'but-chi'         => 'Bút Chì',
+    'but-da-quang'    => 'Bút Dạ Quang',
+    'vo-o-ly'         => 'Vở Ô Li',
+    'so-tay'          => 'Sổ Tay',
+    'giay-note'       => 'Giấy Note',
+];
+$maTheLoai = $book['TheLoai'] ?? '';
+$tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
+?>
+
+<!-- 2. Breadcrumb 3 cấp -->
 <div class="breadcrumb">
     <a href="index.php"> Trang chủ</a>
+    <span class="separator">›</span>
+    <a href="index.php?theloai=<?php echo htmlspecialchars($maTheLoai); ?>" style="text-decoration: none; color: inherit;">
+        <?php echo htmlspecialchars($tenTheLoai); ?>
+    </a>
     <span class="separator">›</span>
     <span class="breadcrumb-current">
          <?php echo htmlspecialchars($book['Title']); ?>
     </span>
 </div>
 
-<!-- Chi tiết sách -->
+<!-- 3. Chi tiết sách -->
 <div class="book-detail">
 
     <!-- LEFT: Ảnh -->
@@ -296,14 +336,7 @@ $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
         <h1><?php echo htmlspecialchars($book['Title']); ?></h1>
 
         <p><b>Tác giả:</b> <?php echo htmlspecialchars($book['Author'] ?? 'Đang cập nhật'); ?></p>
-        <p><b>Thể loại:</b> <?php echo htmlspecialchars($book['TheLoai'] ?? 'Đang cập nhật'); ?></p>
-        <p><b>Hình thức:</b> Bìa mềm</p>
-        <p><b>Tình trạng:</b>
-            <?php echo ($book['Stock'] > 0)
-                ? "<span style='color:green;font-weight:600;'>Còn hàng (" . $book['Stock'] . " cuốn)</span>"
-                : "<span style='color:red;font-weight:600;'>Hết hàng</span>"; ?>
-        </p>
-
+        <p><b>Thể loại:</b> <?php echo htmlspecialchars($tenTheLoai); ?></p>
         <!-- Giá -->
         <div class="price-box">
             <span class="price">
@@ -351,7 +384,7 @@ $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
         </tr>
         <tr>
             <td>Thể loại</td>
-            <td><?php echo htmlspecialchars($book['TheLoai'] ?? 'Đang cập nhật'); ?></td>
+            <td><?php echo htmlspecialchars($tenTheLoai); ?></td>
         </tr>
         <tr>
             <td>Ngôn ngữ</td>

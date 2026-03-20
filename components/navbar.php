@@ -2,16 +2,25 @@
 <nav class="navbar">
     <div class="topbar">
         <div class="topbar-right">
-            <?php if (isset($_SESSION['user_name'])): ?>
-                <span>Chào, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong></span>
-                <span>|</span>
-                <a href="Logout.php">Đăng xuất</a>
-            <?php else: ?>
-                <a href="Dangnhap.php">Đăng nhập</a>
-                <span>|</span>
-                <a href="Dangky.php">Đăng ký</a>
-            <?php endif; ?>
-        </div>
+    <?php if (isset($_SESSION['user_name'])): ?>
+        <span>Chào, <a href="profile.php" title="Xem thông tin tài khoản" style="text-decoration: none; font-weight: bold; color: #e74c3c;">
+    <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+</a></span>
+        <span>|</span>
+        
+        <!-- KIỂM TRA QUYỀN ADMIN Ở ĐÂY -->
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Admin'): ?>
+            <a href="admin.php" style="color: #e74c3c; font-weight: bold;">Trang Quản Trị</a>
+            <span>|</span>
+        <?php endif; ?>
+
+        <a href="Logout.php">Đăng xuất</a>
+    <?php else: ?>
+        <a href="Dangnhap.php">Đăng nhập</a>
+        <span>|</span>
+        <a href="Dangky.php">Đăng ký</a>
+    <?php endif; ?>
+</div>
     </div>
 
     <div class="nav-top">
@@ -90,10 +99,11 @@
             </div><!-- end mega-menu -->
         </div><!-- end category-wrapper -->
 
-        <div class="search-box">
-            <input type="text" placeholder="Tìm kiếm sách...">
-            <button>Tìm kiếm</button>
-        </div>
+        <form action="timkiem.php" method="GET" class="search-box">
+    <input type="text" name="tukhoa" placeholder="Tìm kiếm tên sách, tác giả..." required 
+           value="<?= isset($_GET['tukhoa']) ? htmlspecialchars($_GET['tukhoa']) : '' ?>">
+    <button type="submit">Tìm kiếm</button>
+</form>
 
         <div class="cart" onclick="window.location.href='GioHang.php';" style="cursor: pointer;">
     🛒 Giỏ hàng <span class="cart-count">0</span>

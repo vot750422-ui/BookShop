@@ -13,15 +13,18 @@ $theLoaiMap = [
     'so-tay'          => 'Sổ Tay',
     'giay-note'       => 'Giấy Note',
 ];
-
-$theLoai    = $_GET['theloai'] ?? '';
-$tenHienThi = $theLoaiMap[$theLoai] ?? '';
+$maTheLoai = $book['TheLoai'] ?? '';
+$tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 ?>
 
-<?php if (!empty($tenHienThi)): ?>
 <div class="breadcrumb">
-     <a href="index.php">Trang chủ</a>
+    <a href="index.php">Trang chủ</a>
     <span class="separator">›</span>
-    <span class="breadcrumb-current"> <?php echo htmlspecialchars($tenHienThi); ?></span>
+    <a href="index.php?theloai=<?php echo htmlspecialchars($maTheLoai); ?>" style="text-decoration: none; color: inherit;">
+        <?php echo htmlspecialchars($tenTheLoai); ?>
+    </a>
+    <span class="separator">›</span>
+    <span class="breadcrumb-current">
+         <?php echo htmlspecialchars($book['Title']); ?>
+    </span>
 </div>
-<?php endif; ?>

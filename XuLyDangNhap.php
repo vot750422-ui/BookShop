@@ -7,33 +7,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passInput  = $_POST['password'] ?? '';
 
     if (empty($emailInput) || empty($passInput)) {
-        header("Location: Dangnhap.php?error=trong");
+        header("Location: Dangnhap.php?error=Vui lòng nhập đầy đủ thông tin.");
         exit();
     }
 
-    // Kiểm tra cứng tài khoản Admin
-    if ($emailInput === 'admin@bookstore.com' && $passInput === '123456') {
-        $_SESSION['user_id']   = 0;
-        $_SESSION['user_name'] = 'Admin';
-        $_SESSION['user_role'] = 'Admin';
-        header("Location: Admin.php");
-        exit();
-    }
-
-    // Tài khoản thường → kiểm tra trong DB
     try {
-        $sql  = "SELECT UserID, FullName, `Password`, `Role` FROM Users WHERE Email = ?";
+        // Lấy thêm cột TrangThai từ cơ sở dữ liệu
+        $sql  = "SELECT UserID, FullName, `Password`, `Role`, `TrangThai` FROM Users WHERE Email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$emailInput]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // Kiểm tra xem user có tồn tại và mật khẩu có khớp không
         if ($user && password_verify($passInput, $user['Password'])) {
+            
+            // Nếu tài khoản đã bị khóa (xóa mềm), từ chối đăng nhập
+            if (isset($user['TrangThai']) && $user['TrangThai'] == 0) {
+                header("Location: Dangnhap.php?error=Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.");
+                exit();
+            }
+
+            // Đăng nhập thành công -> Lưu session
             $_SESSION['user_id']   = $user['UserID'];
             $_SESSION['user_name'] = $user['FullName'];
             $_SESSION['user_role'] = $user['Role'];
 
+            // Điều hướng dựa trên vai trò động từ DB
             if ($user['Role'] === 'Admin') {
-                header("Location: AdminWelcome.php");
+                header("Location: admin.php"); // Sửa lại thành admin.php cho đúng với tên file giao diện
             } else {
                 header("Location: index.php");
             }
