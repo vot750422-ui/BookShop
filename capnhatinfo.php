@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
     $userID    = $_SESSION['user_id'];
@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
     $birthdate = trim($_POST['birthdate'] ?? '');
 
     try {
-        $stmt = $conn->prepare("UPDATE Users SET FullName = ?, Phone = ?, BirthDate = ? WHERE UserID = ?");
+        $stmt = $conn->prepare("UPDATE users SET FullName = ?, Phone = ?, BirthDate = ? WHERE UserID = ?");
         $stmt->execute([$fullname, $phone, $birthdate, $userID]);
 
         // Cập nhật lại session để Navbar đổi tên ngay lập tức

@@ -3,11 +3,11 @@ session_start();
 
 // Chỉ admin mới được thực hiện
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
-require_once 'Config.php';
+require_once 'config.php';
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
@@ -31,7 +31,7 @@ switch ($action) {
         }
 
         try {
-            $sql  = "INSERT INTO Books (Title, Author, TheLoai, Price, Stock, ImageURL, Description)
+            $sql  = "INSERT INTO books (Title, Author, TheLoai, Price, Stock, ImageURL, Description)
                      VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$title, $author, $theloai, $price, $stock, $imageurl, $description]);
@@ -63,7 +63,7 @@ switch ($action) {
         }
 
         try {
-            $sql  = "UPDATE Books
+            $sql  = "UPDATE books
                      SET Title=?, Author=?, TheLoai=?, Price=?, Stock=?, ImageURL=?, Description=?
                      WHERE BookID=?";
             $stmt = $conn->prepare($sql);
@@ -89,7 +89,7 @@ switch ($action) {
         }
 
         try {
-            $stmt = $conn->prepare("DELETE FROM Books WHERE BookID = ?");
+            $stmt = $conn->prepare("DELETE FROM books WHERE BookID = ?");
             $stmt->execute([$bookID]);
 
             header("Location: admin_sanpham.php?msg=xoa_ok");

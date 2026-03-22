@@ -1,15 +1,15 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // check admin
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
 // lấy danh sách toàn bộ user (không lấy admin)
-$stmt = $conn->query("SELECT * FROM Users WHERE Role != 'Admin' ORDER BY UserID DESC");
+$stmt = $conn->query("SELECT * FROM users WHERE Role != 'Admin' ORDER BY UserID DESC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

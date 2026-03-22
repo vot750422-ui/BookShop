@@ -5,7 +5,7 @@
 session_start();
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 ?>

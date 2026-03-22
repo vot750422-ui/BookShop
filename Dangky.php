@@ -16,7 +16,7 @@
 
 <!-- Nội dung trang Đăng Ký -->
 <div class="dangky-wrapper">
-    <form class="dangky-container" action="XuLyDangKy.php" method="POST">
+    <form class="dangky-container" action="xulydangky.php" method="POST">
         <h2>Đăng Ký Tài Khoản</h2>
 
         <input type="text"     name="name"        placeholder="Họ tên"              required>
@@ -29,14 +29,13 @@
 
         <button type="submit" class="btn-dangky">Đăng ký</button>
 
-        <p>Đã có tài khoản? <a href="Dangnhap.php">Đăng nhập</a></p>
+        <p>Đã có tài khoản? <a href="dangnhap.php">Đăng nhập</a></p>
     </form>
 </div>
 
 <!-- Footer nhúng từ component -->
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
-
 
 
 </body>

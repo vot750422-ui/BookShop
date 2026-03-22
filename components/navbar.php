@@ -16,9 +16,9 @@
 
         <a href="Logout.php">Đăng xuất</a>
     <?php else: ?>
-        <a href="Dangnhap.php">Đăng nhập</a>
+        <a href="dangnhap.php">Đăng nhập</a>
         <span>|</span>
-        <a href="Dangky.php">Đăng ký</a>
+        <a href="dangky.php">Đăng ký</a>
     <?php endif; ?>
 </div>
     </div>
@@ -105,7 +105,7 @@
     <button type="submit">Tìm kiếm</button>
 </form>
 
-        <div class="cart" onclick="window.location.href='GioHang.php';" style="cursor: pointer;">
+        <div class="cart" onclick="window.location.href='giohang.php';" style="cursor: pointer;">
     🛒 Giỏ hàng <span class="cart-count">0</span>
 </div>
     </div>

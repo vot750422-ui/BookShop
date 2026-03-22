@@ -1,19 +1,19 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emailInput = $_POST['email']    ?? '';
     $passInput  = $_POST['password'] ?? '';
 
     if (empty($emailInput) || empty($passInput)) {
-        header("Location: Dangnhap.php?error=Vui lòng nhập đầy đủ thông tin.");
+        header("Location: dangnhap.php?error=Vui lòng nhập đầy đủ thông tin.");
         exit();
     }
 
     try {
         // Lấy thêm cột TrangThai từ cơ sở dữ liệu
-        $sql  = "SELECT UserID, FullName, `Password`, `Role`, `TrangThai` FROM Users WHERE Email = ?";
+        $sql  = "SELECT UserID, FullName, `Password`, `Role`, `TrangThai` FROM users WHERE Email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$emailInput]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Nếu tài khoản đã bị khóa (xóa mềm), từ chối đăng nhập
             if (isset($user['TrangThai']) && $user['TrangThai'] == 0) {
-                header("Location: Dangnhap.php?error=Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.");
+                header("Location: dangnhap.php?error=Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.");
                 exit();
             }
 
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
 
         } else {
-            header("Location: Dangnhap.php?error=Thông tin đăng nhập không chính xác.");
+            header("Location: dangnhap.php?error=Thông tin đăng nhập không chính xác.");
             exit();
         }
 
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Lỗi hệ thống: " . $e->getMessage());
     }
 } else {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 ?>

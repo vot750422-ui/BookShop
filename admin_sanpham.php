@@ -2,15 +2,15 @@
 session_start();
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
-require_once 'Config.php';
+require_once 'config.php';
 
 // Lấy danh sách sách
 try {
-    $stmt  = $conn->query("SELECT * FROM Books ORDER BY BookID DESC");
+    $stmt  = $conn->query("SELECT * FROM books ORDER BY BookID DESC");
     $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $books = [];
@@ -21,7 +21,7 @@ $editBook = null;
 if (isset($_GET['sua'])) {
     $editID = (int)$_GET['sua'];
     try {
-        $stmt     = $conn->prepare("SELECT * FROM Books WHERE BookID = ?");
+        $stmt     = $conn->prepare("SELECT * FROM books WHERE BookID = ?");
         $stmt->execute([$editID]);
         $editBook = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -83,7 +83,7 @@ if (isset($_GET['sua'])) {
     <div class="form-box">
         <h2><?php echo $editBook ? ' Sửa sách' : ' Thêm sách mới'; ?></h2>
 
-        <form action="XuLySanPham.php" method="POST">
+        <form action="xulysanpham.php" method="POST">
             <?php if ($editBook): ?>
                 <input type="hidden" name="action" value="sua">
                 <input type="hidden" name="bookID" value="<?php echo $editBook['BookID']; ?>">
@@ -205,7 +205,7 @@ if (isset($_GET['sua'])) {
                     <td>
                         <a href="admin_sanpham.php?sua=<?php echo $book['BookID']; ?>"
                            class="btn-edit"> Sửa</a>
-                        <a href="XuLySanPham.php?action=xoa&bookID=<?php echo $book['BookID']; ?>"
+                        <a href="xulysanpham.php?action=xoa&bookID=<?php echo $book['BookID']; ?>"
                            class="btn-delete"
                            onclick="return confirm('Xoá sách \'<?php echo htmlspecialchars($book['Title']); ?>\'?')">
                             Xoá

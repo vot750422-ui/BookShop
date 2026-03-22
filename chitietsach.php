@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // Lấy BookID từ URL
 $bookID = (int)($_GET['id'] ?? 0);
@@ -12,7 +12,7 @@ if ($bookID <= 0) {
 
 // Lấy thông tin sách từ DB
 try {
-    $stmt = $conn->prepare("SELECT * FROM Books WHERE BookID = ?");
+    $stmt = $conn->prepare("SELECT * FROM books WHERE BookID = ?");
     $stmt->execute([$bookID]);
     $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -354,12 +354,12 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 
         <!-- Nút hành động -->
         <div class="actions">
-            <form action="XuLyGioHang.php" method="POST">
+            <form action="xulygiohang.php" method="POST">
                 <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
                 <button type="submit" class="cart-btn"> Thêm vào giỏ hàng</button>
             </form>
-            <form action="XuLyGioHang.php" method="POST">
+            <form action="xulygiohang.php" method="POST">
                 <input type="hidden" name="bookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
                 <button type="submit" name="redirect" value="checkout" class="buy-btn">

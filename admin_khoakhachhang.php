@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // Kiểm tra quyền Admin
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
@@ -16,7 +16,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
     $newStatus = ($action === 'unlock') ? 1 : 0;
 
     try {
-        $stmt = $conn->prepare("UPDATE Users SET TrangThai = ? WHERE UserID = ?");
+        $stmt = $conn->prepare("UPDATE users SET TrangThai = ? WHERE UserID = ?");
         $stmt->execute([$newStatus, $id]);
     } catch (PDOException $e) {
         // Log lỗi nếu cần

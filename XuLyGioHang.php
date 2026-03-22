@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 // Khởi tạo giỏ hàng
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -14,7 +14,7 @@ switch ($action) {
     case 'them':
         if ($BookID > 0) {
             // Chỉ cần lấy thông tin cơ bản để lưu vào Session
-            $stmt = $conn->prepare("SELECT Title, Price, ImageURL FROM Books WHERE BookID = ?");
+            $stmt = $conn->prepare("SELECT Title, Price, ImageURL FROM books WHERE BookID = ?");
             $stmt->execute([$BookID]);
             $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -34,7 +34,7 @@ switch ($action) {
             }
         }
         // Chuyển hướng về giỏ hàng để xem kết quả ngay cho sướng
-        header("Location: GioHang.php?status=success");
+        header("Location: giohang.php?status=success");
         exit();
         break; // <--- Cực kỳ quan trọng, đừng quên cái này!
 
@@ -42,7 +42,7 @@ switch ($action) {
         if (isset($_SESSION['cart'][$BookID])) {
             $_SESSION['cart'][$BookID]['slg']++;
         }
-        header("Location: GioHang.php");
+        header("Location: giohang.php");
         exit();
         break;
 
@@ -53,13 +53,13 @@ switch ($action) {
                 unset($_SESSION['cart'][$BookID]);
             }
         }
-        header("Location: GioHang.php");
+        header("Location: giohang.php");
         exit();
         break;
 
     case 'xoa-het':
         $_SESSION['cart'] = [];
-        header("Location: GioHang.php");
+        header("Location: giohang.php");
         exit();
         break;
 

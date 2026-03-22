@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
@@ -34,12 +34,12 @@ if ($action === 'add') {
         try {
             // Nếu khách chọn "Đặt làm mặc định", ta đưa toàn bộ địa chỉ cũ về 0 (địa chỉ phụ)
             if ($isDef === 1) {
-                $stmtUpdate = $conn->prepare("UPDATE UserAddresses SET IsDefault = 0 WHERE UserID = ?");
+                $stmtUpdate = $conn->prepare("UPDATE useraddresses SET IsDefault = 0 WHERE UserID = ?");
                 $stmtUpdate->execute([$userID]);
             }
 
             // Thêm địa chỉ mới vào DB
-            $stmt = $conn->prepare("INSERT INTO UserAddresses (UserID, ReceiverName, ReceiverPhone, DetailAddress, IsDefault) VALUES (?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO useraddresses (UserID, ReceiverName, ReceiverPhone, DetailAddress, IsDefault) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$userID, $name, $phone, $fullAddress, $isDef]);
         } catch (PDOException $e) {
             // Có thể thêm log lỗi ở đây nếu cần
@@ -56,7 +56,7 @@ elseif ($action === 'delete') {
     if ($addressID > 0) {
         try {
             // Cẩn thận: Kèm theo UserID để khách chỉ xoá được địa chỉ của chính mình
-            $stmt = $conn->prepare("DELETE FROM UserAddresses WHERE AddressID = ? AND UserID = ?");
+            $stmt = $conn->prepare("DELETE FROM useraddresses WHERE AddressID = ? AND UserID = ?");
             $stmt->execute([$addressID, $userID]);
         } catch (PDOException $e) {
             // Bỏ qua lỗi

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,10 +44,10 @@ require_once 'Config.php';
         <?php
         try {
             if (!empty($theLoai)) {
-                $stmt = $conn->prepare("SELECT * FROM Books WHERE TheLoai = ?");
+                $stmt = $conn->prepare("SELECT * FROM books WHERE TheLoai = ?");
                 $stmt->execute([$theLoai]);
             } else {
-                $stmt = $conn->query("SELECT * FROM Books");
+                $stmt = $conn->query("SELECT * FROM books");
             }
 
             $count = 0;
@@ -83,6 +83,5 @@ require_once 'Config.php';
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
-
 </body>
 </html>

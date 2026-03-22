@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'Config.php';
+require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fullName   = $_POST['name']        ?? '';
@@ -14,38 +14,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone      = $_POST['phone']       ?? '';
 
     if (empty($fullName) || empty($email) || empty($password)) {
-        die("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+        header("Location: dangky.php?error=Vui lòng nhập đầy đủ thông tin bắt buộc!");
+        exit();
     }
 
     if ($password !== $rePassword) {
-        die("Mật khẩu nhập lại không khớp!");
+        header("Location: dangky.php?error=Mật khẩu nhập lại không khớp!");
+        exit();
     }
 
     try {
-        // SQL Server dùng []  
-        $sql = "INSERT INTO Users (FullName, Email, BirthDate, `Password`, Address, Phone, `Role`)
+        $sql = "INSERT INTO users (FullName, Email, BirthDate, `Password`, Address, Phone, `Role`)
                 VALUES (?, ?, ?, ?, ?, ?, 'Customer')";
 
         $stmt = $conn->prepare($sql);
-
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt->execute([$fullName, $email, $birthDate, $hashedPassword, $address, $phone]);
 
-        echo "<script>
-    showPopup('Đăng ký thành công! Vui lòng đăng nhập.', 'success', () => {
-        window.location.href = 'Dangnhap.php';
-    });
-</script>";
+        // ✅ Redirect sang dangnhap.php kèm thông báo thành công
+        header("Location: dangnhap.php?success=Đăng ký thành công! Vui lòng đăng nhập.");
         exit();
 
     } catch (PDOException $e) {
         if ($e->getCode() == '23000') {
-            echo "Lỗi: Email này đã tồn tại!";
+            header("Location: dangky.php?error=Email này đã tồn tại trong hệ thống!");
         } else {
-            echo "Lỗi hệ thống: " . $e->getMessage();
+            header("Location: dangky.php?error=Lỗi hệ thống: " . urlencode($e->getMessage()));
         }
+        exit();
     }
 } else {
-    echo "Vui lòng đăng ký từ trang <a href='Dangky.php'>Đăng ký</a>.";
+    header("Location: dangky.php");
+    exit();
 }
 ?>

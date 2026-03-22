@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // Kiểm tra giỏ hàng có hàng không
 $cart = $_SESSION['cart'] ?? [];
 if (empty($cart)) {
-    header("Location: GioHang.php");
+    header("Location: giohang.php");
     exit();
 }
 
@@ -14,7 +14,7 @@ $tongTien = 0;
 $items    = [];
 
 $ids  = implode(',', array_map('intval', array_keys($cart)));
-$stmt = $conn->query("SELECT * FROM Books WHERE BookID IN ($ids)");
+$stmt = $conn->query("SELECT * FROM books WHERE BookID IN ($ids)");
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $slg       = $cart[$row['BookID']]['slg'] ?? 1;
     $thanhTien = $row['Price'] * $slg;
@@ -35,7 +35,7 @@ $userInfo = null;
 
 if ($userID) {
     try {
-        $stmt = $conn->prepare("SELECT FullName, Address, Phone FROM Users WHERE UserID = ?");
+        $stmt = $conn->prepare("SELECT FullName, Address, Phone FROM users WHERE UserID = ?");
         $stmt->execute([$userID]);
         $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) { $userInfo = null; }
@@ -64,7 +64,7 @@ if ($userID) {
         </div>
     <?php endif; ?>
 
-    <form action="XuLyThanhToan.php" method="POST">
+    <form action="xulythanhtoan.php" method="POST">
 
         <!-- THÔNG TIN NGƯỜI NHẬN -->
         <div class="info-box">
@@ -164,7 +164,7 @@ if ($userID) {
         <button type="submit" class="btn-thanhtoan">✅ Xác nhận đặt hàng</button>
     </form>
 
-    <a href="GioHang.php" class="back-link">← Quay lại giỏ hàng</a>
+    <a href="giohang.php" class="back-link">← Quay lại giỏ hàng</a>
 </div>
 </div>
 

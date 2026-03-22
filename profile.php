@@ -1,26 +1,26 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // Bắt buộc đăng nhập mới được vào trang này
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
 $userID = $_SESSION['user_id'];
 
 // 1. Lấy thông tin cá nhân
-$stmtUser = $conn->prepare("SELECT * FROM Users WHERE UserID = ?");
+$stmtUser = $conn->prepare("SELECT * FROM users WHERE UserID = ?");
 $stmtUser->execute([$userID]);
 $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
 // 2. Lấy lịch sử đơn hàng
-$stmtOrders = $conn->prepare("SELECT * FROM Orders WHERE UserID = ? ORDER BY NgayDat DESC");
-$stmtOrders->execute([$userID]);
-$orders = $stmtOrders->fetchAll(PDO::FETCH_ASSOC);
+$stmtorders = $conn->prepare("SELECT * FROM orders WHERE UserID = ? ORDER BY NgayDat DESC");
+$stmtorders->execute([$userID]);
+$orders = $stmtorders->fetchAll(PDO::FETCH_ASSOC);
 // 3. Lấy danh sách địa chỉ
-$stmtAddress = $conn->prepare("SELECT * FROM UserAddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC");
+$stmtAddress = $conn->prepare("SELECT * FROM useraddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC");
 $stmtAddress->execute([$userID]);
 $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -105,7 +105,7 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
             <!-- Form thêm địa chỉ mới -->
             <div style="background: #fdf6ec; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
                 <h4 style="margin-top: 0; color: #2c1a0e;">+ Thêm địa chỉ mới</h4>
-                <form action="XuLyDiaChi.php" method="POST" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                <form action="xulydiachi.php" method="POST" style="display: flex; flex-wrap: wrap; gap: 15px;">
                     <input type="hidden" name="action" value="add">
                     <div style="flex: 1; min-width: 200px;">
                         <input type="text" name="receiver_name" placeholder="Tên người nhận" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
@@ -160,7 +160,7 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
 
                         <!-- Nút xoá địa chỉ -->
-                        <form action="XuLyDiaChi.php" method="POST" style="position: absolute; top: 15px; right: 15px;">
+                        <form action="xulydiachi.php" method="POST" style="position: absolute; top: 15px; right: 15px;">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="address_id" value="<?= $addr['AddressID'] ?>">
                             <button type="submit" onclick="return confirm('Xóa địa chỉ này?')" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold;">Xóa</button>

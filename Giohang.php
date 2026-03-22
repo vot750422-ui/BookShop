@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -31,7 +31,7 @@ if (isset($_POST['action']) && isset($_POST['BookID'])) {
             break;
     }
 
-    header("Location: GioHang.php");
+    header("Location: giohang.php");
     exit();
 }
 
@@ -40,7 +40,7 @@ $items    = [];
 
 if (!empty($_SESSION['cart'])) {
     $ids  = implode(',', array_map('intval', array_keys($_SESSION['cart'])));
-    $stmt = $conn->query("SELECT * FROM Books WHERE BookID IN ($ids)");
+    $stmt = $conn->query("SELECT * FROM books WHERE BookID IN ($ids)");
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $slg       = $_SESSION['cart'][$row['BookID']]['slg'] ?? 1;
@@ -176,7 +176,7 @@ if (!empty($_SESSION['cart'])) {
             </div>
             <div style="display:flex; gap:10px;">
                 <a href="index.php" class="btn-tieptuc">← Tiếp tục mua sắm</a>
-                <a href="Thanhtoan.php" class="btn-thanhtoan">Thanh toán →</a>
+                <a href="thanhtoan.php" class="btn-thanhtoan">Thanh toán →</a>
             </div>
         </div>
     <?php endif; ?>

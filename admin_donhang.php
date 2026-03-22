@@ -1,15 +1,15 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
 $sql = "SELECT o.OrderID, u.FullName, o.TongTien, o.NgayDat, o.TrangThai
-        FROM Orders o
-        JOIN Users u ON o.UserID = u.UserID
+        FROM orders o
+        JOIN users u ON o.UserID = u.UserID
         ORDER BY o.OrderID DESC";
 
 $stmt = $conn->query($sql);

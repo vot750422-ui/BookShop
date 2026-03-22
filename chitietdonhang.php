@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 // 1. Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Dangnhap.php");
+    header("Location: dangnhap.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ $orderID = $_GET['id'] ?? 0;
 
 try {
     // 2. Lấy thông tin tổng quát của đơn hàng (Chỉ lấy nếu đúng của User này)
-    $sqlOrder = "SELECT * FROM Orders WHERE OrderID = ? AND UserID = ?";
+    $sqlOrder = "SELECT * FROM orders WHERE OrderID = ? AND UserID = ?";
     $stmtOrder = $conn->prepare($sqlOrder);
     $stmtOrder->execute([$orderID, $userID]);
     $order = $stmtOrder->fetch(PDO::FETCH_ASSOC);
@@ -24,8 +24,8 @@ try {
 
     // 3. Lấy chi tiết các sản phẩm trong đơn hàng
     $sqlItems = "SELECT od.*, b.Title, b.ImageURL 
-                 FROM OrderDetails od 
-                 JOIN Books b ON od.BookID = b.BookID 
+                 FROM orderdetails od 
+                 JOIN books b ON od.BookID = b.BookID 
                  WHERE od.OrderID = ?";
     $stmtItems = $conn->prepare($sqlItems);
     $stmtItems->execute([$orderID]);

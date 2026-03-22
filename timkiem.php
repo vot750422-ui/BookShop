@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once 'Config.php';
+require_once 'config.php';
 
 $tukhoa = trim($_GET['tukhoa'] ?? '');
 $books = [];
 
 if ($tukhoa !== '') {
     try {
-        $sql = "SELECT * FROM Books WHERE Title LIKE ? OR Author LIKE ? ORDER BY BookID DESC";
+        $sql = "SELECT * FROM books WHERE Title LIKE ? OR Author LIKE ? ORDER BY BookID DESC";
         $stmt = $conn->prepare($sql);
         $searchTerm = "%" . $tukhoa . "%";
         $stmt->execute([$searchTerm, $searchTerm]);

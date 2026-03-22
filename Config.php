@@ -1,8 +1,8 @@
 <?php
 $host     = "localhost";
-$database = "sakurabo1_db";
-$uid      = "sakurabo1_admin";
-$pwd      = "Trong@6419423";       
+$database = "bookshop";
+$uid      = "root";
+$pwd      = "";       
 $charset = 'utf8mb4';
 try {
     $conn = new PDO(

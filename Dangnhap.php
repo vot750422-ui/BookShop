@@ -24,7 +24,7 @@ if (isset($_SESSION['user_name'])) {
 
 <!-- Nội dung trang Đăng Nhập -->
 <div class="login-wrapper">
-    <form class="login-container" action="XuLyDangNhap.php" method="POST">
+    <form class="login-container" action="xulydangnhap.php" method="POST">
         <h2>Đăng Nhập</h2>
 
         <!-- Thông báo lỗi nếu có -->
@@ -39,7 +39,7 @@ if (isset($_SESSION['user_name'])) {
 
         <button type="submit" class="btn-dangnhap">Đăng nhập</button>
 
-        <p>Chưa có tài khoản? <a href="Dangky.php">Đăng ký ngay</a></p>
+        <p>Chưa có tài khoản? <a href="dangky.php">Đăng ký ngay</a></p>
     </form>
 </div>
 
