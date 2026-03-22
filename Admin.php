@@ -1,12 +1,20 @@
 <?php
-
-
-// Chỉ admin mới vào được
 session_start();
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     header("Location: dangnhap.php");
     exit();
+}
+
+require_once 'config.php';
+
+// ✅ Lấy thống kê thật từ DB
+try {
+    $tongSP       = $conn->query("SELECT COUNT(*) FROM books")->fetchColumn();
+    $tongKH       = $conn->query("SELECT COUNT(*) FROM users WHERE `Role` = 'Customer'")->fetchColumn();
+    $tongDH       = $conn->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+} catch (PDOException $e) {
+    $tongSP = $tongKH = $tongDH  = 0;
 }
 ?>
 <!DOCTYPE html>
@@ -19,11 +27,10 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
 </head>
 <body>
 
-<!-- NAVBAR ADMIN -->
 <div class="admin-navbar">
     <div class="admin-navbar-left">
-        <span class="admin-logo"> ADMIN</span>
-        <span class="admin-user">Xin chào, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong></span>
+        <span class="admin-logo">ADMIN</span>
+        <span class="admin-user">Xin chào, <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong></span>
     </div>
     <ul class="admin-menu">
         <li><a href="admin.php" class="active"> Dashboard</a></li>
@@ -35,44 +42,40 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     </ul>
 </div>
 
-<!-- NỘI DUNG -->
 <div class="admin-content">
     <h1> Trang Quản Trị</h1>
     <p class="admin-subtitle">Chào mừng bạn đến trang quản trị hệ thống BookStore.</p>
 
-    <!-- Thống kê nhanh -->
     <div class="stat-grid">
         <div class="stat-card">
-            <div class="stat-icon"></div>
+
             <div class="stat-info">
                 <p class="stat-label">Tổng sản phẩm</p>
-                <p class="stat-number">10</p>
+                <p class="stat-number"><?= number_format($tongSP) ?></p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon"></div>
             <div class="stat-info">
                 <p class="stat-label">Khách hàng</p>
-                <p class="stat-number">--</p>
+                <p class="stat-number"><?= number_format($tongKH) ?></p>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon"></div>
+
             <div class="stat-info">
                 <p class="stat-label">Đơn hàng</p>
-                <p class="stat-number">--</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"></div>
-            <div class="stat-info">
-                <p class="stat-label">Doanh thu</p>
-                <p class="stat-number">--</p>
+                <p class="stat-number"><?= number_format($tongDH) ?></p>
             </div>
         </div>
     </div>
 
-    
+    <h2 style="margin:30px 0 15px; color:#2c1a0e;"> Truy cập nhanh</h2>
+    <div class="quick-links">
+        <a href="admin_sanpham.php" class="quick-card"><p>Quản lý sản phẩm</p></a>
+        <a href="admin_khachhang.php" class="quick-card"><p>Quản lý khách hàng</p></a>
+        <a href="admin_donhang.php" class="quick-card"><p>Quản lý đơn hàng</p></a>
+    </div>
 </div>
 
 </body>
