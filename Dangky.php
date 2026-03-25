@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký - BookStore</title>
-    <!-- CSS dùng chung toàn site -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- CSS riêng của trang Đăng Ký -->
     <link rel="stylesheet" href="assets/css/dangky.css">
 </head>
 <body>
 
-<!-- Navbar nhúng từ component -->
+
 <?php include 'components/navbar.php'; ?>
 
-<!-- Nội dung trang Đăng Ký -->
+
 <div class="dangky-wrapper">
     <form class="dangky-container" action="xulydangky.php" method="POST">
         <h2>Đăng Ký Tài Khoản</h2>
@@ -29,11 +27,11 @@
 
         <button type="submit" class="btn-dangky">Đăng ký</button>
 
-        <p>Đã có tài khoản? <a href="dangnhap.php">Đăng nhập</a></p>
+        <p><a href="dangnhap.php">Đã có tài khoản?</a></p>
     </form>
 </div>
 
-<!-- Footer nhúng từ component -->
+
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
 

@@ -1,42 +1,64 @@
 <?php
 session_start();
 require_once 'config.php';
-// Khởi tạo giỏ hàng
+
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-$BookID = (int)($_POST['BookID'] ?? $_GET['BookID'] ?? 0);
-$action = $_POST['action'] ?? $_GET['action'] ?? '';
-$qty    = (int)($_POST['qty'] ?? 1); // Lấy số lượng người dùng chọn (nếu có)
+$BookID   = (int)($_POST['BookID'] ?? $_GET['BookID'] ?? 0);
+$action   = $_POST['action']   ?? $_GET['action']   ?? '';
+$qty      = max(1, (int)($_POST['qty'] ?? 1));
+$redirect = $_POST['redirect'] ?? '';
+
+$referer  = $_SERVER['HTTP_REFERER'] ?? 'index.php';
 
 switch ($action) {
+
     case 'them':
         if ($BookID > 0) {
-            // Chỉ cần lấy thông tin cơ bản để lưu vào Session
-            $stmt = $conn->prepare("SELECT Title, Price, ImageURL FROM books WHERE BookID = ?");
+            $stmt = $conn->prepare("SELECT Title, Price, ImageURL, Stock FROM books WHERE BookID = ?");
             $stmt->execute([$BookID]);
             $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($book) {
+
+                $stock = (int)$book['Stock'];
                 if (isset($_SESSION['cart'][$BookID])) {
-                    // Nếu đã có trong giỏ, cộng thêm số lượng mới vào
-                    $_SESSION['cart'][$BookID]['slg'] += $qty;
+                    $newQty = $_SESSION['cart'][$BookID]['slg'] + $qty;
+                    $_SESSION['cart'][$BookID]['slg'] = min($newQty, $stock);
                 } else {
-                    // Nếu chưa có, thêm mới hoàn toàn
                     $_SESSION['cart'][$BookID] = [
                         'Title'    => $book['Title'],
                         'Price'    => $book['Price'],
                         'ImageURL' => $book['ImageURL'],
-                        'slg'      => $qty
+                        'slg'      => min($qty, $stock),
                     ];
                 }
             }
         }
-        // Chuyển hướng về giỏ hàng để xem kết quả ngay cho sướng
-        header("Location: giohang.php?status=success");
+
+        if ($action === 'muangay') {
+    $_SESSION['buy_now'] = [
+        $bookID => [
+            'slg' => $soLuong 
+        ]
+    ];
+
+    header("Location: thanhtoan.php?type=buynow");
+    exit();
+}
+
+  
+        if (!empty($referer) && strpos($referer, 'xulygiohang.php') === false) {
+
+            $referer = preg_replace('/(&|\?)msg=[^&]*/', '', $referer);
+            $separator = (parse_url($referer, PHP_URL_QUERY) == NULL) ? '?' : '&';
+            header("Location: " . $referer . $separator . "msg=added");
+        } else {
+            header("Location: index.php?msg=added");
+        }
         exit();
-        break; // <--- Cực kỳ quan trọng, đừng quên cái này!
 
     case 'increase':
         if (isset($_SESSION['cart'][$BookID])) {
@@ -44,7 +66,6 @@ switch ($action) {
         }
         header("Location: giohang.php");
         exit();
-        break;
 
     case 'decrease':
         if (isset($_SESSION['cart'][$BookID])) {
@@ -55,13 +76,11 @@ switch ($action) {
         }
         header("Location: giohang.php");
         exit();
-        break;
 
     case 'xoa-het':
         $_SESSION['cart'] = [];
         header("Location: giohang.php");
         exit();
-        break;
 
     default:
         header("Location: index.php");

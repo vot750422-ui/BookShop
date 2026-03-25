@@ -41,15 +41,6 @@ body {
   letter-spacing: 1px;
 }
 
-.admin-user {
-  color: #e8d9c0;
-  font-size: 13px;
-}
-
-.admin-user strong {
-  color: #f0d49a;
-}
-
 /* Menu */
 .admin-menu {
   list-style: none;
@@ -95,12 +86,6 @@ body {
   color: #2c1a0e;
   font-size: 26px;
   margin-bottom: 8px;
-}
-
-.admin-subtitle {
-  color: #7b4f1e;
-  margin-bottom: 30px;
-  font-size: 14px;
 }
 
 /* ===== STAT CARDS ===== */

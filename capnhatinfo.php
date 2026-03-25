@@ -12,10 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
         $stmt = $conn->prepare("UPDATE users SET FullName = ?, Phone = ?, BirthDate = ? WHERE UserID = ?");
         $stmt->execute([$fullname, $phone, $birthdate, $userID]);
 
-        // Cập nhật lại session để Navbar đổi tên ngay lập tức
+
         $_SESSION['user_name'] = $fullname;
 
-        // Quay lại trang profile kèm thông báo thành công
         header("Location: profile.php?tab=info&msg=ok");
         exit();
     } catch (PDOException $e) {

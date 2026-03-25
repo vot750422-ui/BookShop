@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
 
 require_once 'config.php';
 
-// ✅ Lấy thống kê thật từ DB
 try {
     $tongSP       = $conn->query("SELECT COUNT(*) FROM books")->fetchColumn();
     $tongKH       = $conn->query("SELECT COUNT(*) FROM users WHERE `Role` = 'Customer'")->fetchColumn();
@@ -30,7 +29,6 @@ try {
 <div class="admin-navbar">
     <div class="admin-navbar-left">
         <span class="admin-logo">ADMIN</span>
-        <span class="admin-user">Xin chào, <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong></span>
     </div>
     <ul class="admin-menu">
         <li><a href="admin.php" class="active"> Dashboard</a></li>
@@ -44,7 +42,6 @@ try {
 
 <div class="admin-content">
     <h1> Trang Quản Trị</h1>
-    <p class="admin-subtitle">Chào mừng bạn đến trang quản trị hệ thống BookStore.</p>
 
     <div class="stat-grid">
         <div class="stat-card">

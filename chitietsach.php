@@ -2,7 +2,6 @@
 session_start();
 require_once 'config.php';
 
-// Lấy BookID từ URL
 $bookID = (int)($_GET['id'] ?? 0);
 
 if ($bookID <= 0) {
@@ -10,7 +9,6 @@ if ($bookID <= 0) {
     exit();
 }
 
-// Lấy thông tin sách từ DB
 try {
     $stmt = $conn->prepare("SELECT * FROM books WHERE BookID = ?");
     $stmt->execute([$bookID]);
@@ -50,256 +48,13 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($book['Title']); ?> - BookStore</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        /* ===== CHI TIẾT SÁCH ===== */
-        .book-detail {
-            display: flex;
-            gap: 40px;
-            padding: 40px 60px;
-            flex-wrap: wrap;
-            background: white;
-        }
-
-        /* ===== GALLERY ===== */
-        .book-gallery {
-            flex: 0 0 300px;
-        }
-
-        .main-img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .thumbs {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .thumbs img {
-            width: 70px;
-            height: 85px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 2px solid #eee;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .thumbs img:hover {
-            border-color: #c9a96e;
-        }
-
-        /* ===== THÔNG TIN SÁCH ===== */
-        .book-info {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .book-info h1 {
-            font-size: 22px;
-            color: #2c1a0e;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .book-info p {
-            margin-bottom: 10px;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .book-info p b {
-            color: #2c1a0e;
-        }
-
-        /* Giá */
-        .price-box {
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .price-box .price {
-            font-size: 26px;
-            font-weight: bold;
-            color: #c9a96e;
-        }
-
-        .price-box .old-price {
-            font-size: 16px;
-            color: #aaa;
-            text-decoration: line-through;
-        }
-
-        /* Số lượng */
-        .quantity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #2c1a0e;
-        }
-
-        .quantity button {
-            width: 32px;
-            height: 32px;
-            border: 1px solid #c9a96e;
-            background: white;
-            color: #2c1a0e;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .quantity button:hover {
-            background: #c9a96e;
-            color: white;
-        }
-
-        .quantity input {
-            width: 50px;
-            height: 32px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 15px;
-        }
-
-        /* Nút hành động */
-        .actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .cart-btn {
-            flex: 1;
-            padding: 13px;
-            background: white;
-            color: #2c1a0e;
-            border: 2px solid #c9a96e;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .cart-btn:hover {
-            background: #f0e6d3;
-        }
-
-        .buy-btn {
-            flex: 1;
-            padding: 13px;
-            background: #2c1a0e;
-            color: #f0e6d3;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .buy-btn:hover {
-            background: #c9a96e;
-        }
-
-        /* ===== BẢNG CHI TIẾT ===== */
-        .book-description {
-            padding: 30px 60px;
-            background: #fdf6ec;
-            border-top: 2px solid #f0e6d3;
-        }
-
-        .book-description h2 {
-            color: #2c1a0e;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .book-description table {
-            width: 100%;
-            max-width: 600px;
-            border-collapse: collapse;
-        }
-
-        .book-description table tr {
-            border-bottom: 1px solid #eee;
-        }
-
-        .book-description table td {
-            padding: 10px 15px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .book-description table td:first-child {
-            font-weight: 600;
-            color: #2c1a0e;
-            width: 180px;
-            background: #f7efe0;
-        }
-
-        /* Mô tả sách */
-        .book-desc-text {
-            margin-top: 25px;
-        }
-
-        .book-desc-text h2 {
-            color: #2c1a0e;
-            margin-bottom: 12px;
-            font-size: 18px;
-        }
-
-        .book-desc-text p {
-            color: #555;
-            line-height: 1.8;
-            font-size: 14px;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .book-detail { padding: 20px; }
-            .book-description { padding: 20px; }
-            .book-gallery { flex: 0 0 100%; }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/chitietsach.css"> 
 </head>
 <body>
 
 <?php include 'components/navbar.php'; ?>
-<!-- Breadcrumb -->
-<?php
-// 1. Khai báo dữ liệu TRƯỚC khi in ra HTML
-$theLoaiMap = [
-    'tieu-thuyet'     => 'Tiểu Thuyết',
-    'truyen-ngan'     => 'Truyện Ngắn',
-    'co-dien'         => 'Văn Học Cổ Điển',
-    'kinh-di'         => 'Kinh Dị',
-    'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
-    'ky-nang-song'    => 'Kỹ Năng Sống',
-    'but-bi'          => 'Bút Bi',
-    'but-chi'         => 'Bút Chì',
-    'but-da-quang'    => 'Bút Dạ Quang',
-    'vo-o-ly'         => 'Vở Ô Li',
-    'so-tay'          => 'Sổ Tay',
-    'giay-note'       => 'Giấy Note',
-];
-$maTheLoai = $book['TheLoai'] ?? '';
-$tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
-?>
 
-<!-- 2. Breadcrumb 3 cấp -->
+
 <div class="breadcrumb">
     <a href="index.php"> Trang chủ</a>
     <span class="separator">›</span>
@@ -312,10 +67,9 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
     </span>
 </div>
 
-<!-- 3. Chi tiết sách -->
+
 <div class="book-detail">
 
-    <!-- LEFT: Ảnh -->
     <div class="book-gallery">
         <img class="main-img"
              src="<?php echo $imgSrc; ?>"
@@ -331,20 +85,20 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
         </div>
     </div>
 
-    <!-- RIGHT: Thông tin -->
+
     <div class="book-info">
         <h1><?php echo htmlspecialchars($book['Title']); ?></h1>
 
         <p><b>Tác giả:</b> <?php echo htmlspecialchars($book['Author'] ?? 'Đang cập nhật'); ?></p>
         <p><b>Thể loại:</b> <?php echo htmlspecialchars($tenTheLoai); ?></p>
-        <!-- Giá -->
+        
+
         <div class="price-box">
             <span class="price">
                 <?php echo number_format($book['Price'], 0, ',', '.'); ?> đ
             </span>
         </div>
 
-        <!-- Số lượng -->
         <div class="quantity">
             <span>Số lượng:</span>
             <button onclick="changeQty(-1)">−</button>
@@ -352,32 +106,34 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
             <button onclick="changeQty(1)">+</button>
         </div>
 
-        <!-- Nút hành động -->
+
         <div class="actions">
             <form action="xulygiohang.php" method="POST">
                 <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
-                <button type="submit" class="cart-btn"> Thêm vào giỏ hàng</button>
+                <input type="hidden" name="qty" id="qty-them" value="1">
+                <button type="submit" class="cart-btn" onclick="syncQty('qty-them')">
+                    Thêm vào giỏ hàng
+                </button>
             </form>
+
             <form action="xulygiohang.php" method="POST">
-                <input type="hidden" name="bookID" value="<?php echo $book['BookID']; ?>">
-                <input type="hidden" name="action" value="them">
-                <button type="submit" name="redirect" value="checkout" class="buy-btn">
-            Mua ngay
-        </button>
+                <input type="hidden" name="BookID"   value="<?php echo $book['BookID']; ?>">
+                <input type="hidden" name="action"   value="them">
+                <input type="hidden" name="redirect" value="checkout">
+                <input type="hidden" name="qty"      id="qty-mua" value="1">
+                <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
+                    Mua ngay
+                </button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Bảng thông tin chi tiết -->
+
 <div class="book-description">
     <h2> Thông tin chi tiết</h2>
     <table>
-        <tr>
-            <td>Mã hàng</td>
-            <td><?php echo $book['BookID']; ?></td>
-        </tr>
         <tr>
             <td>Tác giả</td>
             <td><?php echo htmlspecialchars($book['Author'] ?? 'Đang cập nhật'); ?></td>
@@ -404,7 +160,7 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
         </tr>
     </table>
 
-    <!-- Mô tả -->
+
     <?php if (!empty($book['Description'])): ?>
     <div class="book-desc-text">
         <h2> Mô tả sách</h2>
@@ -415,6 +171,7 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
+
 <script>
 function changeQty(delta) {
     const input = document.getElementById('qty');
@@ -424,6 +181,26 @@ function changeQty(delta) {
     if (val > max) val = max;
     input.value = val;
 }
+
+
+function syncQty(hiddenId) {
+    const visible = document.getElementById('qty');
+    const hidden  = document.getElementById(hiddenId);
+    if (visible && hidden) {
+        hidden.value = visible.value;
+    }
+}
+
+window.addEventListener('load', () => {
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'added'): ?>
+
+        showPopup('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+        
+        const url = new URL(window.location);
+        url.searchParams.delete('msg');
+        window.history.replaceState(null, null, url);
+    <?php endif; ?>
+});
 </script>
 
 </body>

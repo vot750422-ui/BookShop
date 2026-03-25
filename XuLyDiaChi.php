@@ -45,7 +45,6 @@ if ($action === 'add') {
     }
 }
 
-// Neu den tu trang thanh toan thi quay lai thanh toan
 if ($redirect === 'thanhtoan') {
     header("Location: thanhtoan.php");
 } else {

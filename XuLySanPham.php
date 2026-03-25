@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Chỉ admin mới được thực hiện
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     header("Location: dangnhap.php");
     exit();
@@ -13,9 +12,9 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 switch ($action) {
 
-    // ══════════════════════════════
-    // THÊM SÁCH MỚI
-    // ══════════════════════════════
+
+    // ADDbook
+
     case 'them':
         $title       = trim($_POST['title']       ?? '');
         $author      = trim($_POST['author']      ?? '');
@@ -44,9 +43,9 @@ switch ($action) {
             exit();
         }
 
-    // ══════════════════════════════
-    // SỬA SÁCH
-    // ══════════════════════════════
+
+    // repair book
+
     case 'sua':
         $bookID      = (int)($_POST['bookID']     ?? 0);
         $title       = trim($_POST['title']       ?? '');
@@ -77,9 +76,9 @@ switch ($action) {
             exit();
         }
 
-    // ══════════════════════════════
-    // XOÁ SÁCH
-    // ══════════════════════════════
+
+    // delete book
+
     case 'xoa':
         $bookID = (int)($_GET['bookID'] ?? 0);
 

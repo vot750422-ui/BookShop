@@ -1,0 +1,221 @@
+/* Chứa toàn bộ CSS của trang Quản lý tài khoản (Profile) */
+
+/* Bố cục chính */
+.profile-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  display: flex;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+/* Sidebar */
+.profile-sidebar {
+  flex: 0 0 220px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+.profile-sidebar h3 {
+  color: #2c1a0e;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border-bottom: 2px solid #c9a96e;
+  padding-bottom: 10px;
+}
+.profile-menu {
+  list-style: none;
+  padding: 0;
+}
+.profile-menu li {
+  margin-bottom: 8px;
+}
+.profile-menu a {
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+  display: block;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.profile-menu a:hover,
+.profile-menu a.active {
+  background: #fdf6ec;
+  color: #c9a96e;
+  font-weight: 600;
+}
+
+/* Nội dung bên phải */
+.profile-content {
+  flex: 1;
+  background: white;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.profile-content h2 {
+  margin-bottom: 20px;
+  color: #2c1a0e;
+  font-size: 20px;
+  border-bottom: 2px solid #f0e6d3;
+  padding-bottom: 10px;
+}
+
+/* Form chung */
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 13px;
+}
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #c9a96e;
+}
+.btn-save {
+  background: #2c1a0e;
+  color: #f0e6d3;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.btn-save:hover {
+  background: #c9a96e;
+}
+
+/* Bảng đơn hàng */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.order-table th {
+  background: #2c1a0e;
+  color: #f0e6d3;
+  padding: 11px 12px;
+  text-align: left;
+  font-size: 13px;
+}
+.order-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #f0e6d3;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.order-table tr:hover td {
+  background: #fdf6ec;
+}
+.btn-xemct {
+  display: inline-block;
+  background: #c9a96e;
+  color: white;
+  padding: 5px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-xemct:hover {
+  background: #a07840;
+}
+.tt-tag {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Sổ địa chỉ */
+.address-card {
+  border: 1px solid #e8d9c0;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: relative;
+  background: #fdf6ec;
+}
+.address-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+.badge-default {
+  display: inline-block;
+  background: #c9a96e;
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 5px;
+  font-weight: 600;
+}
+.btn-xoa-addr {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+.btn-xoa-addr:hover {
+  text-decoration: underline;
+}
+
+.add-address-form {
+  background: white;
+  border: 1px solid #e8d9c0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+.add-address-form h4 {
+  margin: 0 0 15px;
+  color: #2c1a0e;
+  font-size: 15px;
+}
+.addr-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.addr-row .form-group {
+  flex: 1;
+  min-width: 150px;
+  margin-bottom: 0;
+}
+.addr-row .form-group input,
+.addr-row .form-group select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  box-sizing: border-box;
+}

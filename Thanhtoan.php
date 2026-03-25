@@ -65,46 +65,7 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
     <title>Thanh Toan - BookStore</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/thanhtoan.css">
-    <style>
-        .addr-dropdown-wrapper { position:relative; margin-bottom:20px; }
-        .addr-dropdown-btn {
-            width:100%; padding:11px 14px; background:white; border:1px solid #c9a96e;
-            border-radius:6px; text-align:left; cursor:pointer; font-size:14px;
-            color:#2c1a0e; font-weight:600; display:flex;
-            justify-content:space-between; align-items:center; box-sizing:border-box;
-            transition:background 0.2s;
-        }
-        .addr-dropdown-btn:hover { background:#fdf6ec; }
-        .arrow { font-size:12px; transition:transform 0.2s; }
-        .addr-dropdown-btn.open .arrow { transform:rotate(180deg); }
-        .addr-list {
-            display:none; position:absolute; top:calc(100% + 4px); left:0; width:100%;
-            background:white; border:1px solid #ddc9a3; border-radius:6px;
-            box-shadow:0 4px 15px rgba(0,0,0,0.1); z-index:100; max-height:260px; overflow-y:auto;
-        }
-        .addr-list.open { display:block; }
-        .addr-item { padding:12px 16px; border-bottom:1px solid #f0e6d3; cursor:pointer; transition:background 0.2s; }
-        .addr-item:hover { background:#fdf6ec; }
-        .addr-item strong { color:#2c1a0e; font-size:14px; display:block; }
-        .addr-item span   { color:#888; font-size:12px; display:block; margin-top:3px; }
-        .badge-default { display:inline-block; background:#c9a96e; color:white; font-size:10px; padding:1px 7px; border-radius:8px; margin-left:6px; }
-        .addr-them { padding:12px 16px; color:#c9a96e; font-weight:600; font-size:13px; display:block; transition:background 0.2s; text-decoration:none; }
-        .addr-them:hover { background:#fdf6ec; }
-        .selected-addr-box { background:#fdf6ec; border:1px solid #e8d9c0; border-radius:6px; padding:12px 16px; margin-bottom:15px; font-size:14px; color:#2c1a0e; }
-        .selected-addr-box p { margin:3px 0; }
-
-        /* ✅ San pham trong don hang co anh */
-        .order-table img {
-            width: 45px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 4px;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        .order-table td { vertical-align: middle; }
-        .product-cell { display:flex; align-items:center; gap:10px; }
-    </style>
+    
 </head>
 <body>
 

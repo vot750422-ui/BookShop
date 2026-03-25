@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
 
 require_once 'config.php';
 
-// Lấy danh sách sách
 try {
     $stmt  = $conn->query("SELECT * FROM books ORDER BY BookID DESC");
     $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -16,7 +15,6 @@ try {
     $books = [];
 }
 
-// Nếu đang sửa → lấy thông tin sách đó
 $editBook = null;
 if (isset($_GET['sua'])) {
     $editID = (int)$_GET['sua'];
@@ -34,21 +32,15 @@ if (isset($_GET['sua'])) {
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm - Admin</title>
-    <!-- CSS dùng chung cho admin -->
     <link rel="stylesheet" href="assets/css/admin.css">
-    <!-- CSS riêng trang quản lý sản phẩm -->
     <link rel="stylesheet" href="assets/css/admin_sanpham.css">
 </head>
 <body>
 
-<!-- NAVBAR ADMIN -->
+<!-- NAVBAR -->
 <div class="admin-navbar">
     <div class="admin-navbar-left">
         <span class="admin-logo"> ADMIN</span>
-        <span class="admin-user">
-            Xin chào, 
-            <strong><?= htmlspecialchars($_SESSION['user_name'] ?? 'Admin') ?></strong>
-        </span>
     </div>
     <ul class="admin-menu">
         <li><a href="admin.php">Dashboard</a></li>
@@ -62,15 +54,14 @@ if (isset($_GET['sua'])) {
 
 <div class="admin-content">
     <h1> Quản Lý Sản Phẩm</h1>
-    <p class="admin-subtitle">Thêm, sửa, xoá sách trong hệ thống.</p>
-
+ 
     <!-- Thông báo -->
     <?php if (!empty($_GET['msg'])): ?>
         <?php
         $msgs = [
-            'them_ok' => '✅ Thêm sách thành công!',
-            'sua_ok'  => '✅ Cập nhật sách thành công!',
-            'xoa_ok'  => '✅ Xoá sách thành công!',
+            'them_ok' => '✅ Thêm sách thành công',
+            'sua_ok'  => '✅ Cập nhật sách thành công',
+            'xoa_ok'  => '✅ Xoá sách thành công',
             'loi'     => '❌ Có lỗi xảy ra, vui lòng thử lại!',
         ];
         $msgText  = $msgs[$_GET['msg']] ?? '';
@@ -156,7 +147,7 @@ if (isset($_GET['sua'])) {
                 <div class="form-group full">
                     <label>Mô tả sách</label>
                     <textarea name="description"
-                              placeholder="Nhập mô tả ngắn về sách..."><?php echo htmlspecialchars($editBook['Description'] ?? ''); ?></textarea>
+                              placeholder="Nhập mô tả sách..."><?php echo htmlspecialchars($editBook['Description'] ?? ''); ?></textarea>
                 </div>
             </div>
 
@@ -187,7 +178,7 @@ if (isset($_GET['sua'])) {
         </thead>
         <tbody>
             <?php if (empty($books)): ?>
-                <tr><td colspan="8" style="text-align:center; color:#aaa;">Chưa có sách nào</td></tr>
+                <tr><td colspan="8" style="text-align:center; color:#aaa;">Chưa có sách</td></tr>
             <?php else: ?>
                 <?php foreach ($books as $book): ?>
                 <tr>

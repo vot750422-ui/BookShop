@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     exit();
 }
 
-// lấy danh sách toàn bộ user (không lấy admin)
 $stmt = $conn->query("SELECT * FROM users WHERE Role != 'Admin' ORDER BY UserID DESC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -25,10 +24,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="admin-navbar">
     <div class="admin-navbar-left">
         <span class="admin-logo"> ADMIN</span>
-        <span class="admin-user">
-            Xin chào, 
-            <strong><?= htmlspecialchars($_SESSION['user_name'] ?? 'Admin') ?></strong>
-        </span>
     </div>
     <ul class="admin-menu">
         <li><a href="admin.php">Dashboard</a></li>
@@ -42,7 +37,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="admin-content">
     <h1>Quản lý khách hàng</h1>
-    <p class="admin-subtitle">Danh sách khách hàng hiện có</p>
 
     <div class="customer-box">
         <a href="them_user.php" class="btn-add-customer">+ Thêm khách hàng</a>
@@ -61,7 +55,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
             <?php foreach ($users as $u): ?>
                 <?php 
-                    // Mặc định là 1 (hoạt động) nếu cột này bị null
+                    // Mặc định là 1 (hoạt động)
                     $trangThai = $u['TrangThai'] ?? 1; 
                 ?>
                 <tr>
@@ -79,7 +73,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
                     </td>
 
-                    <!-- Nút hành động thay đổi theo trạng thái -->
                     <td>
                         <?php if ($trangThai == 1): ?>
                             <a href="admin_khoakhachhang.php?id=<?= $u['UserID'] ?>&action=lock" class="btn-customer" style="background: #e74c3c; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px;" onclick="return confirm('Bạn có chắc chắn muốn khóa tài khoản này?')">Khóa</a>

@@ -75,7 +75,7 @@ require_once 'config.php';
             }
 
         } catch (Exception $e) {
-            echo "<p>Đang cập nhật dữ liệu sách...</p>";
+            echo "<p>Đang chờ cập nhật ...</p>";
         }
         ?>
     </div>
@@ -83,5 +83,20 @@ require_once 'config.php';
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
+<script>
+window.addEventListener('load', () => {
+    <?php if (isset($_GET['msg'])): ?>
+        <?php if ($_GET['msg'] === 'added'): ?>
+            showPopup('Đã thêm vào giỏ hàng!', 'success');
+        <?php elseif ($_GET['msg'] === 'order_success'): ?>
+            showPopup('Đặt hàng thành công!', 'success');
+        <?php endif; ?>
+        
+        const url = new URL(window.location);
+        url.searchParams.delete('msg');
+        window.history.replaceState(null, null, url);
+    <?php endif; ?>
+});
+</script>
 </body>
 </html>

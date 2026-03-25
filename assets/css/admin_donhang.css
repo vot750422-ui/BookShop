@@ -29,7 +29,7 @@
   border-bottom: 1px solid #eee;
 }
 
-/* hover nhẹ cho đẹp */
+/* hover */
 .order-table tbody tr:hover {
   background: #faf9f7;
 }
@@ -85,18 +85,6 @@
 .status-pending {
   background: #fff3cd;
   color: #856404;
-}
-
-/* Đang giao */
-.status-shipping {
-  background: #cce5ff;
-  color: #004085;
-}
-
-/* Đã giao */
-.status-done {
-  background: #d4edda;
-  color: #155724;
 }
 
 /* Đã hủy */

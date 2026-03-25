@@ -1,3 +1,5 @@
+/* Chứa toàn bộ CSS của trang chi tiết sách */
+
 /* ===== CHI TIẾT SÁCH ===== */
 .book-detail {
   display: flex;
@@ -64,7 +66,7 @@
   color: #2c1a0e;
 }
 
-/* ===== GIÁ ===== */
+/* Giá */
 .price-box {
   margin: 20px 0;
   display: flex;
@@ -78,7 +80,13 @@
   color: #c9a96e;
 }
 
-/* ===== SỐ LƯỢNG ===== */
+.price-box .old-price {
+  font-size: 16px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+/* Số lượng */
 .quantity {
   display: flex;
   align-items: center;
@@ -114,19 +122,15 @@
   font-size: 15px;
 }
 
-/* ===== NÚT HÀNH ĐỘNG ===== */
+/* Nút hành động */
 .actions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.actions form {
-  flex: 1;
-}
-
 .cart-btn {
-  width: 100%;
+  flex: 1;
   padding: 13px;
   background: white;
   color: #2c1a0e;
@@ -143,7 +147,7 @@
 }
 
 .buy-btn {
-  width: 100%;
+  flex: 1;
   padding: 13px;
   background: #2c1a0e;
   color: #f0e6d3;
@@ -157,20 +161,6 @@
 
 .buy-btn:hover {
   background: #c9a96e;
-}
-
-/* Thông báo thêm vào giỏ thành công */
-.alert-success-cart {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  padding: 12px 18px;
-  border-radius: 6px;
-  margin: 0 60px 15px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 /* ===== BẢNG CHI TIẾT ===== */
@@ -209,7 +199,7 @@
   background: #f7efe0;
 }
 
-/* ===== MÔ TẢ SÁCH ===== */
+/* Mô tả sách */
 .book-desc-text {
   margin-top: 25px;
 }
@@ -236,8 +226,5 @@
   }
   .book-gallery {
     flex: 0 0 100%;
-  }
-  .alert-success-cart {
-    margin: 0 20px 15px;
   }
 }

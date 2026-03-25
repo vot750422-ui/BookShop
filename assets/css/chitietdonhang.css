@@ -1,0 +1,308 @@
+/* Toàn bộ CSS cho trang chi tiết đơn hàng */
+.order-detail-wrapper {
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.order-detail-box {
+  background: white;
+  border-radius: 10px;
+  padding: 30px 35px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #c9a96e;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+.detail-header h2 {
+  color: #2c1a0e;
+  margin: 0;
+  font-size: 20px;
+}
+.tt-tag {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+.section-title {
+  color: #2c1a0e;
+  font-size: 15px;
+  margin: 0 0 15px;
+  border-left: 4px solid #c9a96e;
+  padding-left: 10px;
+}
+
+/* Bảng sản phẩm */
+.item-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.item-table th {
+  background: #2c1a0e;
+  color: #f0e6d3;
+  padding: 11px 12px;
+  text-align: left;
+  font-size: 13px;
+}
+.item-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #f0e6d3;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.item-table tr:last-child td {
+  border-bottom: none;
+}
+.item-table img {
+  width: 45px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.tong-row {
+  text-align: right;
+  font-size: 18px;
+  font-weight: bold;
+  color: #c9a96e;
+  margin-top: 12px;
+}
+
+/* Form chỉnh sửa */
+.edit-section {
+  background: #fdf6ec;
+  border-radius: 8px;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.form-row.one {
+  grid-template-columns: 1fr;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c1a0e;
+}
+.form-group input,
+.form-group textarea {
+  padding: 9px 12px;
+  border: 1px solid #ddc9a3;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+  font-family: Arial, sans-serif;
+  background: white;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #c9a96e;
+}
+.form-group input:disabled,
+.form-group textarea:disabled {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* Dropdown sổ địa chỉ */
+.addr-dropdown-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+.addr-dropdown-btn {
+  width: 100%;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid #c9a96e;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2c1a0e;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  transition: background 0.2s;
+}
+.addr-dropdown-btn:hover {
+  background: #fdf6ec;
+}
+.arrow {
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+.addr-dropdown-btn.open .arrow {
+  transform: rotate(180deg);
+}
+.addr-list {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddc9a3;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.addr-list.open {
+  display: block;
+}
+.addr-item {
+  padding: 11px 14px;
+  border-bottom: 1px solid #f0e6d3;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 13px;
+}
+.addr-item:hover {
+  background: #fdf6ec;
+}
+.addr-item strong {
+  color: #2c1a0e;
+  font-size: 13px;
+  display: block;
+}
+.addr-item span {
+  color: #888;
+  font-size: 12px;
+  margin-top: 2px;
+  display: block;
+}
+.badge-default {
+  display: inline-block;
+  background: #c9a96e;
+  color: white;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: 5px;
+}
+.addr-them {
+  padding: 11px 14px;
+  color: #c9a96e;
+  font-weight: 600;
+  font-size: 13px;
+  display: block;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.addr-them:hover {
+  background: #fdf6ec;
+}
+
+/* Địa chỉ hiện tại */
+.current-addr-box {
+  background: #fdf6ec;
+  border: 1px solid #e8d9c0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #555;
+}
+.current-addr-box strong {
+  color: #2c1a0e;
+}
+
+/* Thông báo đã huỷ */
+.notice-huy {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 12px 18px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Các nút hành động */
+.btn-group {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.btn-update {
+  background: #2c1a0e;
+  color: #f0e6d3;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-update:hover {
+  background: #c9a96e;
+}
+.btn-huy {
+  background: white;
+  color: #e74c3c;
+  border: 2px solid #e74c3c;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-huy:hover {
+  background: #e74c3c;
+  color: white;
+}
+.btn-back {
+  display: inline-block;
+  background: white;
+  color: #2c1a0e;
+  border: 2px solid #c9a96e;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-back:hover {
+  background: #f0e6d3;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .order-detail-box {
+    padding: 20px;
+  }
+}

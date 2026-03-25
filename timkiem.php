@@ -23,16 +23,14 @@ if ($tukhoa !== '') {
     <meta charset="UTF-8">
     <title>Kết quả tìm kiếm - BookStore</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/index.css"> <!-- File CSS ta vừa tách -->
+    <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
 
 <?php include 'components/navbar.php'; ?>
 
-<!-- Bỏ hết style inline, chỉ dùng class chuẩn của bạn -->
 <main class="main-content">
     
-    <!-- Dùng thẻ h1 giống hệt trang chủ để ăn CSS -->
     <?php if ($tukhoa === ''): ?>
         <h1>VUI LÒNG NHẬP TỪ KHÓA ĐỂ TÌM KIẾM</h1>
     <?php endif; ?>
@@ -41,7 +39,6 @@ if ($tukhoa !== '') {
         <?php
         if (!empty($books)) {
             foreach ($books as $row) {
-                // Sửa lại cho đúng key ImageURL giống với index.php
                 $imgSrc = 'assets/images/' . ($row['ImageURL'] ?? 'book-default.jpg');
                 echo "
                 <div class='book-card'>

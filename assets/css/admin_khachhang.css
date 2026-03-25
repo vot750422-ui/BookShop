@@ -36,15 +36,6 @@ body {
   letter-spacing: 1px;
 }
 
-.admin-user {
-  color: #e8d9c0;
-  font-size: 13px;
-}
-
-.admin-user strong {
-  color: #f0d49a;
-}
-
 /* ===== NỘI DUNG ===== */
 .admin-content {
   margin-top: 80px;

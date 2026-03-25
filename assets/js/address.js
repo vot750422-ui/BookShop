@@ -2,7 +2,6 @@ const API = "https://provinces.open-api.vn/api";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const sel = document.getElementById("tinh");
-  // Nếu trang hiện tại không có ô chọn tỉnh thì bỏ qua, không chạy lỗi
   if (!sel) return;
 
   try {
