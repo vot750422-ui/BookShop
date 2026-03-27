@@ -21,26 +21,29 @@ if (isset($_SESSION['user_name'])) {
 <div class="login-wrapper">
     <form class="login-container" action="xulydangnhap.php" method="POST">
         <h2>Đăng Nhập</h2>
-
-        <?php if (!empty($_GET['error'])): ?>
-            <p style="color:red; text-align:center; margin-bottom:10px;">
-                <?php echo htmlspecialchars($_GET['error']); ?>
-            </p>
-        <?php endif; ?>
-
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Mật khẩu" required>
-
         <button type="submit" class="btn-dangnhap">Đăng nhập</button>
-
         <p><a href="dangky.php">Chưa có tài khoản? </a></p>
     </form>
 </div>
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
-
-
+<script src="assets/js/popup.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMsg = urlParams.get('error');
+    const successMsg = urlParams.get('success');
+    
+    if (errorMsg) {
+        showPopup(errorMsg, 'error');
+        window.history.replaceState(null, null, window.location.pathname);
+    } else if (successMsg) {
+        showPopup(successMsg, 'success');
+        window.history.replaceState(null, null, window.location.pathname);
+    }
+</script>
 
 </body>
 </html>

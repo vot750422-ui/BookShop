@@ -48,10 +48,6 @@
                         <a> Sách</a>
                         <span>›</span>
                     </li>
-                    <li data-panel="panel-vpp">
-                        <a> Văn phòng phẩm</a>
-                        <span>›</span>
-                    </li>
                 </ul>
 
                 <!-- Sách -->
@@ -75,24 +71,7 @@
                 </div>
 
                 <!-- Văn phòng phẩm -->
-                <div class="mega-panel" id="panel-vpp">
-                    <div class="mega-group">
-                        <h4> Dụng Cụ Viết</h4>
-                        <ul>
-                            <li><a href="index.php?theloai=but-bi">Bút Bi</a></li>
-                            <li><a href="index.php?theloai=but-chi">Bút Chì</a></li>
-                            <li><a href="index.php?theloai=but-da-quang">Bút Dạ Quang</a></li>
-                        </ul>
-                    </div>
-                    <div class="mega-group">
-                        <h4> Vở & Giấy</h4>
-                        <ul>
-                            <li><a href="index.php?theloai=vo-o-ly">Vở Ô Li</a></li>
-                            <li><a href="index.php?theloai=so-tay">Sổ Tay</a></li>
-                            <li><a href="index.php?theloai=giay-note">Giấy Note</a></li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
