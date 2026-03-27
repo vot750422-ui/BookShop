@@ -22,7 +22,6 @@ switch ($action) {
             $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($book) {
-
                 $stock = (int)$book['Stock'];
                 if (isset($_SESSION['cart'][$BookID])) {
                     $newQty = $_SESSION['cart'][$BookID]['slg'] + $qty;
@@ -38,26 +37,25 @@ switch ($action) {
             }
         }
 
-        if ($action === 'muangay') {
-    $_SESSION['buy_now'] = [
-        $bookID => [
-            'slg' => $soLuong 
-        ]
-    ];
-
-    header("Location: thanhtoan.php?type=buynow");
-    exit();
-}
-
-  
         if (!empty($referer) && strpos($referer, 'xulygiohang.php') === false) {
-
             $referer = preg_replace('/(&|\?)msg=[^&]*/', '', $referer);
             $separator = (parse_url($referer, PHP_URL_QUERY) == NULL) ? '?' : '&';
             header("Location: " . $referer . $separator . "msg=added");
         } else {
             header("Location: index.php?msg=added");
         }
+        exit();
+
+
+    case 'muangay':
+        if ($BookID > 0) {
+            $_SESSION['buy_now'] = [
+                $BookID => ['slg' => $qty]
+            ];
+            header("Location: thanhtoan.php?type=buynow");
+            exit();
+        }
+        header("Location: index.php");
         exit();
 
     case 'increase':
@@ -79,7 +77,7 @@ switch ($action) {
 
     case 'xoa-het':
         $_SESSION['cart'] = [];
-        header("Location: giohang.php");
+        header("Location: giohang.php?success=" . urlencode("Đã dọn sạch giỏ hàng!"));
         exit();
 
     default:

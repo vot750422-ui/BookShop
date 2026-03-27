@@ -154,8 +154,8 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
         <h3 style="color:#2c1a0e; margin:0 0 10px 0; font-size:20px;">Xác nhận xoá</h3>
         <p style="color:#555; margin-bottom:25px; font-size:15px; line-height:1.5;">Bạn có chắc chắn muốn xoá địa chỉ này không?</p>
         <div style="display:flex; gap:12px; justify-content:center;">
-            <button id="btn-confirm-xoa" style="background:#e74c3c; color:white; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Có, xoá ngay</button>
-            <button onclick="document.getElementById('modal-xoa-addr').style.display='none'" style="background:#eee; color:#333; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Không, quay lại</button>
+            <button id="btn-confirm-xoa" style="background:#e74c3c; color:white; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Có</button>
+            <button onclick="document.getElementById('modal-xoa-addr').style.display='none'" style="background:#eee; color:#333; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Không</button>
         </div>
     </div>
 </div>

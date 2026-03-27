@@ -28,7 +28,9 @@ if (isset($_POST['action']) && isset($_POST['BookID'])) {
             break;
         case 'xoa-het':
             $_SESSION['cart'] = [];
-            break;
+            // Điều hướng kèm thông báo thành công
+            header("Location: giohang.php?success=" . urlencode(""));
+            exit();
     }
 
     header("Location: giohang.php");
@@ -122,12 +124,11 @@ if (!empty($_SESSION['cart'])) {
 
         <div class="btn-group">
             <div>
-
+                <!-- Form đã bỏ onclick, bấm là submit gọi PHP xử lý luôn -->
                 <form method="POST" style="display:inline;" id="form-xoa-het">
                     <input type="hidden" name="BookID" value="0">
                     <input type="hidden" name="action" value="xoa-het">
-                    <button type="button" class="btn-xoa" style="padding:10px 20px;"
-                            onclick="confirmXoaHet()">
+                    <button type="submit" class="btn-xoa" style="padding:10px 20px;">
                          Xoá tất cả
                     </button>
                 </form>
@@ -142,45 +143,6 @@ if (!empty($_SESSION['cart'])) {
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
-
-<script>
-function confirmXoaHet() {
-    showPopup('Xoá toàn bộ giỏ hàng?', 'warning');
-    hienNut2('form-xoa-het');
-}
-
-
-function hienNut2(formId) {
-
-    const closeBtn = document.getElementById('popup-close');
-    closeBtn.style.display = 'none';
-
-    const cu = document.getElementById('popup-confirm-group');
-    if (cu) cu.remove();
-
-    const btnGroup = document.createElement('div');
-    btnGroup.id        = 'popup-confirm-group';
-    btnGroup.className = 'popup-btn-group';
-    btnGroup.innerHTML = `
-        <button class="popup-btn-confirm" id="popup-yes"> Xác nhận</button>
-        <button class="popup-btn-cancel"  id="popup-no"> Huỷ</button>
-    `;
-    closeBtn.parentNode.insertBefore(btnGroup, closeBtn);
-
-    document.getElementById('popup-yes').onclick = function () {
-        closePopup();
-        setTimeout(() => document.getElementById(formId).submit(), 300);
-    };
-
-    document.getElementById('popup-no').onclick = function () {
-        closePopup();
-        setTimeout(() => {
-            btnGroup.remove();
-            closeBtn.style.display = 'block';
-        }, 300);
-    };
-}
-</script>
 
 </body>
 </html>

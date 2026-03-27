@@ -118,14 +118,13 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
             </form>
 
             <form action="xulygiohang.php" method="POST">
-                <input type="hidden" name="BookID"   value="<?php echo $book['BookID']; ?>">
-                <input type="hidden" name="action"   value="them">
-                <input type="hidden" name="redirect" value="checkout">
-                <input type="hidden" name="qty"      id="qty-mua" value="1">
-                <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
-                    Mua ngay
-                </button>
-            </form>
+    <input type="hidden" name="BookID"   value="<?php echo $book['BookID']; ?>">
+    <input type="hidden" name="action"   value="muangay">
+    <input type="hidden" name="qty"      id="qty-mua" value="1">
+    <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
+        Mua ngay
+    </button>
+</form>
         </div>
     </div>
 </div>

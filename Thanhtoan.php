@@ -2,7 +2,14 @@
 session_start();
 require_once 'config.php';
 
-$cart = $_SESSION['cart'] ?? [];
+$isBuyNow = isset($_GET['type']) && $_GET['type'] === 'buynow';
+
+if ($isBuyNow) {
+    $cart = $_SESSION['buy_now'] ?? [];
+} else {
+    $cart = $_SESSION['cart'] ?? [];
+}
+
 if (empty($cart)) {
     header("Location: giohang.php");
     exit();
@@ -80,6 +87,7 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
     <?php endif; ?>
 
     <form action="xulythanhtoan.php" method="POST" onsubmit="return validateForm()">
+    <input type="hidden" name="checkout_type" value="<?= isset($_GET['type']) && $_GET['type'] === 'buynow' ? 'buynow' : 'cart' ?>">
 
         <div class="info-box">
             <h3>Thong tin nguoi nhan</h3>
@@ -205,7 +213,7 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
             </div>
         </div>
 
-        <!-- ✅ San pham co anh -->
+
         <div class="info-box">
             <h3>San pham da chon</h3>
             <table class="order-table">
