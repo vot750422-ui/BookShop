@@ -88,7 +88,7 @@ switch ($action) {
         }
 
         try {
-            $stmt = $conn->prepare("DELETE FROM books WHERE BookID = ?");
+            $stmt = $conn->prepare("UPDATE books SET TrangThai = 0 WHERE BookID = ?");
             $stmt->execute([$bookID]);
 
             header("Location: admin_sanpham.php?msg=xoa_ok");

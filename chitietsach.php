@@ -140,10 +140,6 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
             <td>Hình thức</td>
             <td>Bìa mềm</td>
         </tr>
-        <tr>
-            <td>Tình trạng kho</td>
-            <td><?php echo $book['Stock']; ?> cuốn</td>
-        </tr>
     </table>
 
 
