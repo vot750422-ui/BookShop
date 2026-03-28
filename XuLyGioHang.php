@@ -9,14 +9,15 @@ if (!isset($_SESSION['cart'])) {
 $BookID = (int)($_POST['BookID'] ?? $_GET['BookID'] ?? 0);
 $action = $_POST['action']   ?? $_GET['action']   ?? '';
 $qty    = max(1, (int)($_POST['qty'] ?? 1));
-$isAjax = isset($_POST['ajax']); // Kiểm tra yêu cầu từ AJAX
+$isAjax = isset($_POST['ajax']);
 
 switch ($action) {
     case 'them':
     case 'increase':
     case 'decrease':
         if ($BookID > 0) {
-            $stmt = $conn->prepare("SELECT Title, Price, ImageURL, Stock FROM books WHERE BookID = ?");
+
+            $stmt = $conn->prepare("SELECT Title, Price, ImageURL, Stock FROM books WHERE BookID = ? AND trangthai = 1");
             $stmt->execute([$BookID]);
             $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -25,11 +26,18 @@ switch ($action) {
                 if ($action === 'them' || $action === 'increase') {
                     $currentQty = $_SESSION['cart'][$BookID]['slg'] ?? 0;
                     $addQty = ($action === 'them') ? $qty : 1;
+                    
+
+                    $newQty = $currentQty + $addQty;
+                    if ($newQty > $stock) {
+                        $newQty = $stock; 
+                    }
+
                     $_SESSION['cart'][$BookID] = [
                         'Title' => $book['Title'],
                         'Price' => $book['Price'],
                         'ImageURL' => $book['ImageURL'],
-                        'slg' => min($currentQty + $addQty, $stock)
+                        'slg' => $newQty
                     ];
                 } elseif ($action === 'decrease') {
                     if (isset($_SESSION['cart'][$BookID])) {
@@ -37,14 +45,27 @@ switch ($action) {
                         if ($_SESSION['cart'][$BookID]['slg'] <= 0) unset($_SESSION['cart'][$BookID]);
                     }
                 }
+            } else {
+
+                if (isset($_SESSION['cart'][$BookID])) {
+                    unset($_SESSION['cart'][$BookID]);
+                }
             }
         }
         break;
 
     case 'muangay':
         if ($BookID > 0) {
-            $_SESSION['buy_now'] = [$BookID => ['slg' => $qty]];
-            if (!$isAjax) { header("Location: thanhtoan.php?type=buynow"); exit(); }
+            $stmt = $conn->prepare("SELECT Stock FROM books WHERE BookID = ? AND trangthai = 1");
+            $stmt->execute([$BookID]);
+            $bookCheck = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($bookCheck && $bookCheck['Stock'] >= $qty) {
+                $_SESSION['buy_now'] = [$BookID => ['slg' => $qty]];
+                if (!$isAjax) { header("Location: thanhtoan.php?type=buynow"); exit(); }
+            } else {
+                if (!$isAjax) { header("Location: chitietsach.php?id=$BookID&error=Sản phẩm không đủ số lượng!"); exit(); }
+            }
         }
         break;
 
@@ -54,7 +75,6 @@ switch ($action) {
         break;
 }
 
-// XỬ LÝ TRẢ VỀ CHO AJAX
 if ($isAjax) {
     $itemQty = $_SESSION['cart'][$BookID]['slg'] ?? 0;
     $itemPrice = $book['Price'] ?? 0;
@@ -73,7 +93,6 @@ if ($isAjax) {
     exit();
 }
 
-// CHUYỂN HƯỚNG CHO PHP THUẦN (Nếu không có AJAX)
 $referer = $_SERVER['HTTP_REFERER'] ?? 'index.php';
 header("Location: " . $referer);
 exit();

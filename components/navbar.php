@@ -31,10 +31,9 @@
         </div>
         <ul class="menu">
             <li><a href="index.php">Trang chủ</a></li>
-
+            <!-- Đã cập nhật link Tin tức và Liên hệ -->
             <li><a href="tintuc.php">Tin tức</a></li>
-            <li><a href="lienhe.php">Liên Hệ</a></li>
-
+            <li><a href="lienhe.php">Liên hệ</a></li>
         </ul>
     </div>
 

@@ -12,9 +12,7 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 switch ($action) {
 
-
-    // ADDbook
-
+    // THÊM SÁCH
     case 'them':
         $title       = trim($_POST['title']       ?? '');
         $author      = trim($_POST['author']      ?? '');
@@ -30,8 +28,9 @@ switch ($action) {
         }
 
         try {
-            $sql  = "INSERT INTO books (Title, Author, TheLoai, Price, Stock, ImageURL, Description)
-                     VALUES (?, ?, ?, ?, ?, ?, ?)";
+  
+            $sql  = "INSERT INTO books (Title, Author, TheLoai, Price, Stock, ImageURL, Description, trangthai)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$title, $author, $theloai, $price, $stock, $imageurl, $description]);
 
@@ -43,9 +42,7 @@ switch ($action) {
             exit();
         }
 
-
-    // repair book
-
+    // SỬA SÁCH
     case 'sua':
         $bookID      = (int)($_POST['bookID']     ?? 0);
         $title       = trim($_POST['title']       ?? '');
@@ -77,27 +74,20 @@ switch ($action) {
         }
 
 
-    // delete book
-
-    case 'xoa':
+    case 'toggle':
         $bookID = (int)($_GET['bookID'] ?? 0);
 
-        if ($bookID <= 0) {
+        if ($bookID > 0) {
+
+            $sql = "UPDATE books SET TrangThai = IF(TrangThai = 1, 0, 1) WHERE BookID = ?";
+            $stmtUpdate = $conn->prepare($sql);
+            $stmtUpdate->execute([$bookID]);
+            
+            header("Location: admin_sanpham.php?msg=toggle_ok");
+        } else {
             header("Location: admin_sanpham.php?msg=loi");
-            exit();
         }
-
-        try {
-            $stmt = $conn->prepare("UPDATE books SET TrangThai = 0 WHERE BookID = ?");
-            $stmt->execute([$bookID]);
-
-            header("Location: admin_sanpham.php?msg=xoa_ok");
-            exit();
-
-        } catch (PDOException $e) {
-            header("Location: admin_sanpham.php?msg=loi");
-            exit();
-        }
+        exit();
 
     default:
         header("Location: admin_sanpham.php");

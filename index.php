@@ -22,18 +22,17 @@ require_once 'config.php';
     $tenHienThi = $theLoaiMap[$theLoai] ?? '';
 
     echo $tenHienThi
-        ? "<h1>" . htmlspecialchars(strtoupper($tenHienThi)) . "</h1>"
+        ? "<h1>" . htmlspecialchars(mb_strtoupper($tenHienThi, 'UTF-8')) . "</h1>"
         : "<h1>SÁCH MỚI NHẤT</h1>";
-    ?>
-
+?>
     <div class="book-grid">
         <?php
         try {
             if (!empty($theLoai)) {
-                $stmt = $conn->prepare("SELECT * FROM books WHERE TheLoai = ?");
+                $stmt = $conn->prepare("SELECT * FROM books WHERE TheLoai = ? AND trangthai = 1");
                 $stmt->execute([$theLoai]);
             } else {
-                $stmt = $conn->query("SELECT * FROM books");
+                $stmt = $conn->query("SELECT * FROM books WHERE trangthai = 1");
             }
 
             $count = 0;
@@ -49,7 +48,6 @@ require_once 'config.php';
                     <p class='author'>" . htmlspecialchars($row['Author']) . "</p>
                     <p class='price'>" . number_format($row['Price'], 0, ',', '.') . " đ</p>
 
-                    <!-- Overlay trượt lên khi hover -->
                     <a href='chitietsach.php?id={$row['BookID']}' class='book-overlay'>
                          Xem chi tiết sách
                     </a>
@@ -57,7 +55,7 @@ require_once 'config.php';
             }
 
             if ($count === 0) {
-                echo "<p>Không có sách nào trong thể loại này.</p>";
+                echo "<p style='grid-column: 1 / -1; text-align: center; margin-top: 20px;'>Không có sách nào trong danh mục này.</p>";
             }
 
         } catch (Exception $e) {

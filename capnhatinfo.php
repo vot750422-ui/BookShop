@@ -8,10 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userID    = $_SESSION['user_id'];
-    $fullName  = trim($_POST['fullname']  ?? '');
-    $phone     = trim($_POST['Phone']     ?? '');
-    $address   = trim($_POST['address']   ?? '');
+    $userID = $_SESSION['user_id'];
+    $fullName = trim($_POST['fullname'] ?? '');
+    $phone = trim($_POST['Phone'] ?? $_POST['phone'] ?? '');
     $birthDate = trim($_POST['birthdate'] ?? '');
 
     if (empty($fullName) || empty($phone)) {
@@ -25,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $stmt = $conn->prepare("UPDATE users SET FullName = ?, Phone = ?, Address = ?, BirthDate = ? WHERE UserID = ?");
-        $stmt->execute([$fullName, $phone, $address, $birthDate, $userID]);
-
+        $stmt = $conn->prepare("UPDATE users SET FullName = ?, Phone = ?, BirthDate = ? WHERE UserID = ?");
+        $stmt->execute([$fullName, $phone, $birthDate, $userID]);
+        
         header("Location: profile.php?tab=info&success=" . urlencode("Cập nhật thông tin thành công!"));
         exit();
     } catch (PDOException $e) {

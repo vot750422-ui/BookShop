@@ -29,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_name'] = $user['FullName'];
             $_SESSION['user_role'] = $user['Role'];
 
-            // Dùng chung một câu thông báo
             $msg = urlencode("Đăng nhập thành công!");
 
             if ($user['Role'] === 'Admin') {

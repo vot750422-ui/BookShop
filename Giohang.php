@@ -46,6 +46,7 @@ if (!empty($_SESSION['cart'])) {
 <head>
     <meta charset="UTF-8">
     <title>Giỏ Hàng - BookStore</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/giohang.css">
 </head>

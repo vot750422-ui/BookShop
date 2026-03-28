@@ -27,31 +27,43 @@ try {
     }
 
     $trangThaiHienTai = mb_strtolower(trim($order['TrangThai']));
-    if ($trangThaiHienTai === 'da huy') {
+    if ($trangThaiHienTai === 'da huy' || $trangThaiHienTai === 'hủy' || $trangThaiHienTai === 'huy') {
         header("Location: chitietdonhang.php?id=$orderID");
         exit();
     }
 
     if ($action === 'capnhat') {
-        $hoTen     = trim($_POST['HoTen']     ?? '');
-        $phone     = trim($_POST['Phone']     ?? '');
-        $diaChiDay = trim($_POST['DiaChiDay'] ?? '');
-        $email     = trim($_POST['Email']     ?? '');
-        $ghiChu    = trim($_POST['GhiChu']    ?? '');
 
-        $sql  = "UPDATE orders SET HoTen=?, Phone=?, DiaChiDay=?, Email=?, GhiChu=? WHERE OrderID=? AND UserID=?";
+        $hoTen     = trim($_POST['HoTen'] ?? '');
+        $phone     = trim($_POST['Phone'] ?? '');
+        $diaChiDay = trim($_POST['DiaChiDay'] ?? '');
+        $email     = trim($_POST['Email'] ?? '');
+        $ghiChu    = trim($_POST['GhiChu'] ?? '');
+
+
+        $sql = "UPDATE orders SET HoTen=?, Phone=?, DiaChiDay=?, Email=?, GhiChu=? WHERE OrderID=? AND UserID=?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$hoTen, $phone, $diaChiDay, $email, $ghiChu, $orderID, $userID]);
-
-        header("Location: chitietdonhang.php?id=$orderID&success=" . urlencode("Cập nhật đơn hàng thành công!"));
+        
+        header("Location: chitietdonhang.php?id=$orderID&success=Cập nhật đơn hàng thành công!");
         exit();
+    } 
+    
+    elseif ($action === 'huy') {
+        $stmtDetails = $conn->prepare("SELECT BookID, SoLuong FROM orderdetails WHERE OrderID = ?");
+        $stmtDetails->execute([$orderID]);
+        $details = $stmtDetails->fetchAll(PDO::FETCH_ASSOC);
 
-    } elseif ($action === 'huy') {
-        $sql  = "UPDATE orders SET TrangThai = 'Da huy' WHERE OrderID = ? AND UserID = ?";
+        $stmtRestore = $conn->prepare("UPDATE books SET Stock = Stock + ? WHERE BookID = ?");
+        foreach ($details as $d) {
+            $stmtRestore->execute([$d['SoLuong'], $d['BookID']]);
+        }
+
+        $sql = "UPDATE orders SET TrangThai = 'Da huy' WHERE OrderID = ? AND UserID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$orderID, $userID]);
-
-        header("Location: chitietdonhang.php?id=$orderID&success=" . urlencode("Đơn hàng đã được huỷ thành công!"));
+        
+        header("Location: chitietdonhang.php?id=$orderID&success=Đơn hàng đã được huỷ. Tồn kho đã hoàn lại!");
         exit();
     }
 

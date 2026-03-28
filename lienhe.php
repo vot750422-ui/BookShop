@@ -7,6 +7,7 @@ require_once 'config.php';
 <head>
     <meta charset="UTF-8">
     <title>Liên Hệ – BookStore</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/lienhe.css">
 </head>

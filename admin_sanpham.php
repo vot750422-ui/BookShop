@@ -32,6 +32,7 @@ if (isset($_GET['sua'])) {
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm - Admin</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin_sanpham.css">
 </head>
@@ -47,7 +48,7 @@ if (isset($_GET['sua'])) {
         <li><a href="admin_sanpham.php" class="active">Quản lý sản phẩm</a></li>
         <li><a href="admin_khachhang.php">Quản lý khách hàng</a></li>
         <li><a href="admin_donhang.php">Quản lý đơn hàng</a></li>
-        <li><a href="index.php">Trang chủ</a></li>
+        <li><a href="index.php" target="_blank">Xem trang chủ</a></li>
         <li><a href="logout.php" class="btn-logout">Đăng xuất</a></li>
     </ul>
 </div>
@@ -59,10 +60,10 @@ if (isset($_GET['sua'])) {
     <?php if (!empty($_GET['msg'])): ?>
         <?php
         $msgs = [
-            'them_ok' => '✅ Thêm sách thành công',
-            'sua_ok'  => '✅ Cập nhật sách thành công',
-            'xoa_ok'  => '✅ Xoá sách thành công',
-            'loi'     => '❌ Có lỗi xảy ra, vui lòng thử lại!',
+            'them_ok'   => ' Thêm sách thành công',
+            'sua_ok'    => ' Cập nhật sách thành công',
+            'toggle_ok' => ' Thay đổi trạng thái sách thành công',
+            'loi'       => ' Có lỗi xảy ra, vui lòng thử lại!',
         ];
         $msgText  = $msgs[$_GET['msg']] ?? '';
         $msgClass = str_contains($_GET['msg'], 'ok') ? 'alert-success' : 'alert-error';
@@ -102,6 +103,7 @@ if (isset($_GET['sua'])) {
                     <select name="theloai" required>
                         <option value="">-- Chọn thể loại --</option>
                         <?php
+                        // $theLoaiMap được lấy từ config.php
                         foreach ($theLoaiMap as $val => $label) {
                             $selected = ($editBook['TheLoai'] ?? '') === $val ? 'selected' : '';
                             echo "<option value='{$val}' {$selected}>{$label}</option>";
@@ -156,17 +158,19 @@ if (isset($_GET['sua'])) {
                 <th>Ảnh</th>
                 <th>Tên sách</th>
                 <th>Tác giả</th>
-                <th>Thể loại</th>
                 <th>Giá</th>
                 <th>Tồn kho</th>
-                <th>Hành động</th>
+                <th>Trạng thái</th>
+                <th style="min-width: 140px;">Hành động</th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($books)): ?>
                 <tr><td colspan="8" style="text-align:center; color:#aaa;">Chưa có sách</td></tr>
             <?php else: ?>
-                <?php foreach ($books as $book): ?>
+                <?php foreach ($books as $book): 
+                    $trangThai = $book['TrangThai']; // Mặc định là 1 nếu NULL
+                ?>
                 <tr>
                     <td><?php echo $book['BookID']; ?></td>
                     <td>
@@ -176,17 +180,33 @@ if (isset($_GET['sua'])) {
                     </td>
                     <td><?php echo htmlspecialchars($book['Title']); ?></td>
                     <td><?php echo htmlspecialchars($book['Author']); ?></td>
-                    <td><?php echo htmlspecialchars($book['TheLoai']); ?></td>
                     <td><?php echo number_format($book['Price'], 0, ',', '.'); ?> đ</td>
                     <td><?php echo $book['Stock']; ?></td>
                     <td>
+                        <?php if ($trangThai == 1): ?>
+                            <span style="color: #2ecc71; font-weight: bold; background: #e8f8f5; padding: 4px 8px; border-radius: 4px; font-size: 13px;">Đang bán</span>
+                        <?php else: ?>
+                            <span style="color: #e74c3c; font-weight: bold; background: #fdedec; padding: 4px 8px; border-radius: 4px; font-size: 13px;">Đã ẩn</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
                         <a href="admin_sanpham.php?sua=<?php echo $book['BookID']; ?>"
                            class="btn-edit"> Sửa</a>
-                        <a href="xulysanpham.php?action=xoa&bookID=<?php echo $book['BookID']; ?>"
-                           class="btn-delete"
-                           onclick="return confirm('Xoá sách \'<?php echo htmlspecialchars($book['Title']); ?>\'?')">
-                            Xoá
-                        </a>
+                        
+                        <!-- Nút Ẩn/Hiện động dựa vào trạng thái -->
+                        <?php if ($trangThai == 1): ?>
+                            <a href="xulysanpham.php?action=toggle&bookID=<?php echo $book['BookID']; ?>"
+                               class="btn-delete" style="background-color: #e67e22;"
+                               onclick="return confirm('Bạn có chắc muốn ẨN sách \'<?php echo htmlspecialchars(addslashes($book['Title'])); ?>\' khỏi hệ thống không?')">
+                                Ẩn
+                            </a>
+                        <?php else: ?>
+                            <a href="xulysanpham.php?action=toggle&bookID=<?php echo $book['BookID']; ?>"
+                               class="btn-delete" style="background-color: #3498db;"
+                               onclick="return confirm('Bạn có chắc muốn HIỆN lại sách \'<?php echo htmlspecialchars(addslashes($book['Title'])); ?>\' không?')">
+                                Hiện
+                            </a>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

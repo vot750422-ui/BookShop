@@ -7,7 +7,7 @@ $books = [];
 
 if ($tukhoa !== '') {
     try {
-        $sql = "SELECT * FROM books WHERE Title LIKE ? OR Author LIKE ? ORDER BY BookID DESC";
+        $sql = "SELECT * FROM books WHERE (Title LIKE ? OR Author LIKE ?) AND trangthai = 1 ORDER BY BookID DESC";
         $stmt = $conn->prepare($sql);
         $searchTerm = "%" . $tukhoa . "%";
         $stmt->execute([$searchTerm, $searchTerm]);
@@ -22,6 +22,7 @@ if ($tukhoa !== '') {
 <head>
     <meta charset="UTF-8">
     <title>Kết quả tìm kiếm - BookStore</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/index.css">
 </head>
@@ -32,7 +33,9 @@ if ($tukhoa !== '') {
 <main class="main-content">
     
     <?php if ($tukhoa === ''): ?>
-        <h1>VUI LÒNG NHẬP TỪ KHÓA ĐỂ TÌM KIẾM</h1>
+        <h1 style="text-align: center; margin-top: 20px;">VUI LÒNG NHẬP TỪ KHÓA ĐỂ TÌM KIẾM</h1>
+    <?php else: ?>
+        <h1 style="text-align: center; margin-bottom: 30px;">Kết quả tìm kiếm cho: "<?= htmlspecialchars($tukhoa) ?>"</h1>
     <?php endif; ?>
 
     <div class="book-grid">

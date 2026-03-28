@@ -10,7 +10,7 @@ if ($bookID <= 0) {
 }
 
 try {
-    $stmt = $conn->prepare("SELECT * FROM books WHERE BookID = ?");
+    $stmt = $conn->prepare("SELECT * FROM books WHERE BookID = ? AND trangthai = 1");
     $stmt->execute([$bookID]);
     $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -33,6 +33,7 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($book['Title']); ?> - BookStore</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/chitietsach.css"> 
 </head>
@@ -85,34 +86,32 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
             </span>
         </div>
 
-        <div class="quantity">
-            <span>Số lượng:</span>
-            <button onclick="changeQty(-1)">−</button>
-            <input type="number" id="qty" value="1" min="1" max="<?php echo $book['Stock']; ?>">
-            <button onclick="changeQty(1)">+</button>
-        </div>
+        <?php if ($book['Stock'] > 0): ?>
+            <div class="quantity">
+                <span>Số lượng:</span>
+                <button onclick="changeQty(-1)">−</button>
+                <input type="number" id="qty" value="1" min="1" max="<?php echo $book['Stock']; ?>">
+                <button onclick="changeQty(1)">+</button>
+            </div>
+            
+            <div class="actions">
+                <form id="form-add-to-cart" action="xulygiohang.php" method="POST">
+                    <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
+                    <input type="hidden" name="action" value="them">
+                    <input type="hidden" name="qty" id="qty-them" value="1">
+                    <button type="submit" class="cart-btn">Thêm vào giỏ hàng</button>
+                </form>
 
-
-        <div class="actions">
-            <form id="form-add-to-cart" action="xulygiohang.php" method="POST">
-                <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
-                <input type="hidden" name="action" value="them">
-                <!-- Input này sẽ được cart.js tự động lấy giá trị từ ô #qty -->
-                <input type="hidden" name="qty" id="qty-them" value="1">
-                <button type="submit" class="cart-btn">
-                    Thêm vào giỏ hàng
-                </button>
-            </form>
-
-            <form action="xulygiohang.php" method="POST">
-                <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
-                <input type="hidden" name="action" value="muangay">
-                <input type="hidden" name="qty" id="qty-mua" value="1">
-                <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
-                    Mua ngay
-                </button>
-            </form>
-        </div>
+                <form action="xulygiohang.php" method="POST">
+                    <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
+                    <input type="hidden" name="action" value="muangay">
+                    <input type="hidden" name="qty" id="qty-mua" value="1">
+                    <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">Mua ngay</button>
+                </form>
+            </div>
+        <?php else: ?>
+            <p style="color: #e74c3c; font-size: 18px; font-weight: bold; margin-top: 20px;">Sản phẩm hiện đang tạm hết hàng.</p>
+        <?php endif; ?>
     </div>
 </div>
 

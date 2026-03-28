@@ -2,7 +2,6 @@
 session_start();
 require_once 'config.php';
 
-// check admin
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     header("Location: dangnhap.php");
     exit();
@@ -16,6 +15,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html>
 <head>
     <title>Quản lý khách hàng</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin_khachhang.css">
 </head>
