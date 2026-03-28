@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
 }
 
 $sql = "SELECT o.OrderID, o.TongTien, o.NgayDat, o.TrangThai,
-               o.HoTen, o.Phone,
+               COALESCE(o.Phone, u.Phone, '') AS Phone,
                COALESCE(u.FullName, o.HoTen, 'Khach vang lai') AS TenKhach
         FROM orders o
         LEFT JOIN users u ON o.UserID = u.UserID
@@ -30,7 +30,6 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="admin-navbar">
     <div class="admin-navbar-left">
         <span class="admin-logo">ADMIN</span>
-     
     </div>
     <ul class="admin-menu">
         <li><a href="admin.php">Dashboard</a></li>
@@ -59,6 +58,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Tổng Tiền</th>
                 <th>Ngày Đặt</th>
                 <th>Trạng Thái</th>
+                <th>Cập nhật</th>
             </tr>
         </thead>
         <tbody>
@@ -66,15 +66,17 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <td><strong>#<?= $o['OrderID'] ?></strong></td>
                 <td><?= htmlspecialchars($o['TenKhach']) ?></td>
-                <td><?= htmlspecialchars($o['Phone'] ?? '') ?></td>
-                <td><?= number_format($o['TongTien'], 0, ',', '.') ?> d</td>
+                <td><?= htmlspecialchars($o['Phone']) ?></td>
+                <td><?= number_format($o['TongTien'], 0, ',', '.') ?> đ</td>
                 <td><?= $o['NgayDat'] ? date("d/m/Y H:i", strtotime($o['NgayDat'])) : '---' ?></td>
                 <td>
                     <?php
                     $tt = $o['TrangThai'];
                     $colors = [
-                        'Cho xac nhan'  => '#f39c12',
-                        'Huy'           => '#e74c3c',
+                        'Chờ xác nhận' => '#f39c12',
+                        'Đang giao'    => '#3498db',
+                        'Đã giao'      => '#2ecc71',
+                        'Da huy'       => '#e74c3c',
                     ];
                     $color = $colors[$tt] ?? '#888';
                     ?>
@@ -82,6 +84,18 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                  border-radius:4px; font-size:13px; font-weight:600;">
                         <?= htmlspecialchars($tt) ?>
                     </span>
+                </td>
+                <td>
+                    <form action="update_trangthai.php" method="POST" style="display:flex;gap:6px;align-items:center;">
+                        <input type="hidden" name="order_id" value="<?= $o['OrderID'] ?>">
+                        <select name="trangthai" style="padding:4px 8px;border-radius:4px;border:1px solid #ccc;font-size:13px;">
+                            <option value="Chờ xác nhận" <?= $tt === 'Chờ xác nhận' ? 'selected' : '' ?>>Chờ xác nhận</option>
+                            <option value="Đang giao"    <?= $tt === 'Đang giao'    ? 'selected' : '' ?>>Đang giao</option>
+                            <option value="Đã giao"      <?= $tt === 'Đã giao'      ? 'selected' : '' ?>>Đã giao</option>
+                            <option value="Da huy"       <?= $tt === 'Da huy'       ? 'selected' : '' ?>>Huỷ</option>
+                        </select>
+                        <button type="submit" style="padding:4px 10px;background:#2c1a0e;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px;">Lưu</button>
+                    </form>
                 </td>
             </tr>
             <?php endforeach; ?>

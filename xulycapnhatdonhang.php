@@ -27,35 +27,31 @@ try {
     }
 
     $trangThaiHienTai = mb_strtolower(trim($order['TrangThai']));
-    if ($trangThaiHienTai === 'da huy' || $trangThaiHienTai === 'hủy' || $trangThaiHienTai === 'huy') {
+    if ($trangThaiHienTai === 'da huy') {
         header("Location: chitietdonhang.php?id=$orderID");
         exit();
     }
 
     if ($action === 'capnhat') {
-        $hoTen     = trim($_POST['HoTen'] ?? '');
-        $phone     = trim($_POST['Phone'] ?? '');
+        $hoTen     = trim($_POST['HoTen']     ?? '');
+        $phone     = trim($_POST['Phone']     ?? '');
         $diaChiDay = trim($_POST['DiaChiDay'] ?? '');
-        $phuong    = trim($_POST['PhuongXa'] ?? '');
-        $quan      = trim($_POST['QuanHuyen'] ?? '');
-        $tinh      = trim($_POST['TinhTP'] ?? '');
-        $email     = trim($_POST['Email'] ?? '');
-        $ghiChu    = trim($_POST['GhiChu'] ?? '');
+        $email     = trim($_POST['Email']     ?? '');
+        $ghiChu    = trim($_POST['GhiChu']    ?? '');
 
-        $sql = "UPDATE orders SET HoTen=?, Phone=?, DiaChiDay=?, PhuongXa=?, QuanHuyen=?, TinhTP=?, Email=?, GhiChu=? WHERE OrderID=? AND UserID=?";
+        $sql  = "UPDATE orders SET HoTen=?, Phone=?, DiaChiDay=?, Email=?, GhiChu=? WHERE OrderID=? AND UserID=?";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$hoTen, $phone, $diaChiDay, $phuong, $quan, $tinh, $email, $ghiChu, $orderID, $userID]);
-        
-        header("Location: chitietdonhang.php?id=$orderID&success=Cập nhật đơn hàng thành công!");
+        $stmt->execute([$hoTen, $phone, $diaChiDay, $email, $ghiChu, $orderID, $userID]);
+
+        header("Location: chitietdonhang.php?id=$orderID&success=" . urlencode("Cập nhật đơn hàng thành công!"));
         exit();
-    } 
-    
-    elseif ($action === 'huy') {
-        $sql = "UPDATE orders SET TrangThai = 'Da huy' WHERE OrderID = ? AND UserID = ?";
+
+    } elseif ($action === 'huy') {
+        $sql  = "UPDATE orders SET TrangThai = 'Da huy' WHERE OrderID = ? AND UserID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$orderID, $userID]);
-        
-        header("Location: chitietdonhang.php?id=$orderID&success=Đơn hàng đã được huỷ thành công!");
+
+        header("Location: chitietdonhang.php?id=$orderID&success=" . urlencode("Đơn hàng đã được huỷ thành công!"));
         exit();
     }
 

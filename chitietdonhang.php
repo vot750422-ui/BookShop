@@ -29,10 +29,6 @@ try {
     $stmtItems->execute([$orderID]);
     $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmtAddr = $conn->prepare("SELECT * FROM useraddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC");
-    $stmtAddr->execute([$userID]);
-    $addresses = $stmtAddr->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
     die("Loi: " . $e->getMessage());
 }
@@ -40,18 +36,9 @@ try {
 $trangThai = $order['TrangThai'] ?? '';
 $daHuy     = (mb_strtolower(trim($trangThai)) === 'da huy');
 
-$defaultAddr = null;
-foreach ($addresses as $addr) {
-    if ($addr['IsDefault'] == 1) { $defaultAddr = $addr; break; }
-}
-if (!$defaultAddr && !empty($addresses)) { $defaultAddr = $addresses[0]; }
-
-$displayHoTen  = ($order['HoTen']     ?? '') ?: ($defaultAddr['ReceiverName']  ?? '');
-$displayPhone  = ($order['Phone']     ?? '') ?: ($defaultAddr['ReceiverPhone'] ?? '');
-$displayDiaChi = ($order['DiaChiDay'] ?? '') ?: ($defaultAddr['DiaChiDay']     ?? '');
-$displayPhuong = ($order['PhuongXa']  ?? '') ?: ($defaultAddr['PhuongXa']      ?? '');
-$displayQuan   = ($order['QuanHuyen'] ?? '') ?: ($defaultAddr['QuanHuyen']     ?? '');
-$displayTinh   = ($order['TinhTP']    ?? '') ?: ($defaultAddr['TinhTP']        ?? '');
+$displayHoTen  = $order['HoTen']     ?? '';
+$displayPhone  = $order['Phone']     ?? '';
+$displayDiaChi = $order['DiaChiDay'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -86,67 +73,49 @@ $displayTinh   = ($order['TinhTP']    ?? '') ?: ($defaultAddr['TinhTP']        ?
                             <?= htmlspecialchars($item['Title']) ?>
                         </div>
                     </td>
-                    <td><?= number_format($item['DonGia'],0,',','.') ?> đ</td>
+                    <td><?= number_format($item['DonGia'], 0, ',', '.') ?> đ</td>
                     <td><?= $item['SoLuong'] ?></td>
-                    <td style="text-align:right;"><?= number_format($item['DonGia']*$item['SoLuong'],0,',','.') ?> đ</td>
+                    <td style="text-align:right;"><?= number_format($item['DonGia'] * $item['SoLuong'], 0, ',', '.') ?> đ</td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <div class="tong-row">Tổng cộng: <?= number_format($order['TongTien'],0,',','.') ?> VNĐ</div>
+        <div class="tong-row">Tổng cộng: <?= number_format($order['TongTien'], 0, ',', '.') ?> VNĐ</div>
     </div>
 
     <div class="order-detail-box">
-        <h3 class="section-title" style="font-size:17px;margin-bottom:20px;">Thông tin giao hàng</h3>
+        <h3 class="section-title">Thông tin giao hàng</h3>
 
         <?php if ($daHuy): ?>
             <div class="notice-huy">Đơn hàng đã bị huỷ</div>
         <?php endif; ?>
 
-        <form id="form-capnhat" action="xulycapnhatdonhang.php" method="POST" onsubmit="return <?= $daHuy ? 'khongChoCapNhat()' : 'validateForm()' ?>">
+        <form action="xulycapnhatdonhang.php" method="POST" onsubmit="return <?= $daHuy ? 'khongChoCapNhat()' : 'true' ?>">
             <input type="hidden" name="orderID" value="<?= $orderID ?>">
             <input type="hidden" name="action"  value="capnhat">
 
             <div class="edit-section">
-                <h3 class="section-title">Địa chỉ giao hàng</h3>
-
-                <?php if (!$daHuy && !empty($addresses)): ?>
-                <div class="addr-dropdown-wrapper">
-                    <button type="button" class="addr-dropdown-btn" id="addrDropBtn">
-                        <span id="addrDropLabel"><?= htmlspecialchars($displayHoTen . ' - ' . $displayDiaChi . ', ' . $displayPhuong . ', ' . $displayQuan . ', ' . $displayTinh) ?></span>
-                        <span class="arrow">&#9660;</span>
-                    </button>
-                    <div class="addr-list" id="addrList">
-                        <?php foreach ($addresses as $addr): ?>
-                        <div class="addr-item" data-name="<?= htmlspecialchars($addr['ReceiverName']) ?>" data-phone="<?= htmlspecialchars($addr['ReceiverPhone']) ?>" data-diachi="<?= htmlspecialchars($addr['DiaChiDay']) ?>" data-phuong="<?= htmlspecialchars($addr['PhuongXa']) ?>" data-quan="<?= htmlspecialchars($addr['QuanHuyen']) ?>" data-tinh="<?= htmlspecialchars($addr['TinhTP']) ?>" onclick="chonDiaChi(this)">
-                            <strong><?= htmlspecialchars($addr['ReceiverName']) ?></strong>
-                            <span><?= htmlspecialchars($addr['DiaChiDay']) ?>, <?= htmlspecialchars($addr['PhuongXa']) ?>, <?= htmlspecialchars($addr['QuanHuyen']) ?>, <?= htmlspecialchars($addr['TinhTP']) ?></span>
-                        </div>
-                        <?php endforeach; ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Họ tên</label>
+                        <input type="text" name="HoTen" value="<?= htmlspecialchars($displayHoTen) ?>" <?= $daHuy ? 'disabled' : '' ?>>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="tel" name="Phone" value="<?= htmlspecialchars($displayPhone) ?>" maxlength="10" <?= $daHuy ? 'disabled' : '' ?>>
                     </div>
                 </div>
-                <?php endif; ?>
-
-                <input type="hidden" name="HoTen" id="HoTen" value="<?= htmlspecialchars($displayHoTen) ?>">
-                <input type="hidden" name="Phone" id="Phone" value="<?= htmlspecialchars($displayPhone) ?>">
-                <input type="hidden" name="DiaChiDay" id="DiaChiDay" value="<?= htmlspecialchars($displayDiaChi) ?>">
-                <input type="hidden" name="PhuongXa" id="PhuongXa" value="<?= htmlspecialchars($displayPhuong) ?>">
-                <input type="hidden" name="QuanHuyen" id="QuanHuyen" value="<?= htmlspecialchars($displayQuan) ?>">
-                <input type="hidden" name="TinhTP" id="TinhTP" value="<?= htmlspecialchars($displayTinh) ?>">
-
-                <div class="current-addr-box" id="current-addr-box">
-                    <strong><?= htmlspecialchars($displayHoTen) ?></strong> | <?= htmlspecialchars($displayPhone) ?><br>
-                    <?= htmlspecialchars($displayDiaChi) ?>, <?= htmlspecialchars($displayPhuong) ?>, <?= htmlspecialchars($displayQuan) ?>, <?= htmlspecialchars($displayTinh) ?>
+                <div class="form-group">
+                    <label>Địa chỉ giao hàng</label>
+                    <input type="text" name="DiaChiDay" value="<?= htmlspecialchars($displayDiaChi) ?>" <?= $daHuy ? 'disabled' : '' ?>>
                 </div>
-            </div>
-
-            <div class="edit-section">
-                <h3 class="section-title">Thông tin thêm</h3>
-                <div class="form-row one">
-                    <div class="form-group"><label>Email</label><input type="email" name="Email" value="<?= htmlspecialchars($order['Email'] ?? '') ?>" <?= $daHuy ? 'disabled' : '' ?>></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="Email" value="<?= htmlspecialchars($order['Email'] ?? '') ?>" <?= $daHuy ? 'disabled' : '' ?>>
                 </div>
-                <div class="form-row one">
-                    <div class="form-group"><label>Ghi chú</label><textarea name="GhiChu" <?= $daHuy ? 'disabled' : '' ?>><?= htmlspecialchars($order['GhiChu'] ?? '') ?></textarea></div>
+                <div class="form-group">
+                    <label>Ghi chú</label>
+                    <textarea name="GhiChu" <?= $daHuy ? 'disabled' : '' ?>><?= htmlspecialchars($order['GhiChu'] ?? '') ?></textarea>
                 </div>
             </div>
 
@@ -168,7 +137,7 @@ $displayTinh   = ($order['TinhTP']    ?? '') ?: ($defaultAddr['TinhTP']        ?
 
 <div id="modal-huy-don" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
     <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.3); text-align:center; max-width:400px; width:90%; border-top: 5px solid #e74c3c;">
-        <h3 style="color:#2c1a0e; margin:0 0 10px 0; font-size:20px;"> Xác nhận huỷ đơn</h3>
+        <h3 style="color:#2c1a0e; margin:0 0 10px 0; font-size:20px;">Xác nhận huỷ đơn</h3>
         <p style="color:#555; margin-bottom:25px; font-size:15px; line-height:1.5;">Bạn có chắc chắn muốn huỷ đơn hàng này không?</p>
         <div style="display:flex; gap:12px; justify-content:center;">
             <button onclick="document.getElementById('form-huy').submit()" style="background:#e74c3c; color:white; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Có</button>
@@ -180,44 +149,9 @@ $displayTinh   = ($order['TinhTP']    ?? '') ?: ($defaultAddr['TinhTP']        ?
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
 <script src="assets/js/popup.js"></script>
-
 <script>
-const addrDropBtn = document.getElementById('addrDropBtn');
-const addrList    = document.getElementById('addrList');
-
-if (addrDropBtn) {
-    addrDropBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        addrDropBtn.classList.toggle('open');
-        addrList.classList.toggle('open');
-    });
-    document.addEventListener('click', () => {
-        addrDropBtn?.classList.remove('open');
-        addrList?.classList.remove('open');
-    });
-}
-
-function chonDiaChi(el) {
-    document.getElementById('HoTen').value     = el.dataset.name;
-    document.getElementById('Phone').value     = el.dataset.phone;
-    document.getElementById('DiaChiDay').value = el.dataset.diachi;
-    document.getElementById('PhuongXa').value  = el.dataset.phuong;
-    document.getElementById('QuanHuyen').value = el.dataset.quan;
-    document.getElementById('TinhTP').value    = el.dataset.tinh;
-
-    document.getElementById('addrDropLabel').textContent = `${el.dataset.name} - ${el.dataset.diachi}, ${el.dataset.phuong}, ${el.dataset.quan}, ${el.dataset.tinh}`;
-    document.getElementById('current-addr-box').innerHTML = `<strong>${el.dataset.name}</strong> | ${el.dataset.phone}<br>${el.dataset.diachi}, ${el.dataset.phuong}, ${el.dataset.quan}, ${el.dataset.tinh}`;
-
-    addrDropBtn.classList.remove('open');
-    addrList.classList.remove('open');
-}
-
 function khongChoCapNhat() { showPopup('Đơn hàng này đã bị huỷ', 'error'); return false; }
-function validateForm() {
-    if (!document.getElementById('HoTen').value.trim()) { showPopup('Vui lòng chọn địa chỉ giao hàng!', 'error'); return false; }
-    return true;
-}
-function confirmHuyDon() { document.getElementById('modal-huy-don').style.display = 'flex'; }
+function confirmHuyDon()   { document.getElementById('modal-huy-don').style.display = 'flex'; }
 </script>
 </body>
 </html>

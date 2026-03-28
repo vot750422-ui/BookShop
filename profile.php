@@ -16,10 +16,6 @@ $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 $stmtOrders = $conn->prepare("SELECT * FROM orders WHERE UserID = ? ORDER BY NgayDat DESC");
 $stmtOrders->execute([$userID]);
 $orders = $stmtOrders->fetchAll(PDO::FETCH_ASSOC);
-
-$stmtAddress = $conn->prepare("SELECT * FROM useraddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC");
-$stmtAddress->execute([$userID]);
-$addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -38,9 +34,8 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
         <h3>Tài khoản của tôi</h3>
         <?php $tab = $_GET['tab'] ?? 'info'; ?>
         <ul class="profile-menu">
-            <li><a href="?tab=info" class="<?= $tab=='info'?'active':'' ?>">Thông tin cá nhân</a></li>
-            <li><a href="?tab=address" class="<?= $tab=='address'?'active':'' ?>">Sổ địa chỉ</a></li>
-            <li><a href="?tab=orders" class="<?= $tab=='orders'?'active':'' ?>">Đơn đặt hàng</a></li>
+            <li><a href="?tab=info"   class="<?= $tab=='info'   ? 'active' : '' ?>">Thông tin cá nhân</a></li>
+            <li><a href="?tab=orders" class="<?= $tab=='orders' ? 'active' : '' ?>">Đơn đặt hàng</a></li>
         </ul>
     </div>
 
@@ -58,7 +53,14 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại</label>
-                    <input type="tel" name="Phone" id="infoPhone" value="<?= htmlspecialchars($user['Phone'] ?? '') ?>" required maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <input type="tel" name="Phone" id="infoPhone"
+                           value="<?= htmlspecialchars($user['Phone'] ?? '') ?>"
+                           required maxlength="10"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text" name="address" value="<?= htmlspecialchars($user['Address'] ?? '') ?>" placeholder="Số nhà, tên đường, phường, quận, tỉnh...">
                 </div>
                 <div class="form-group">
                     <label>Ngày sinh</label>
@@ -67,60 +69,6 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
                 <button type="submit" class="btn-save">Lưu thay đổi</button>
             </form>
 
-        <?php elseif ($tab == 'address'): ?>
-            <h2>Sổ địa chỉ</h2>
-            <div class="add-address-form">
-                <h4>Thêm địa chỉ mới</h4>
-                <form action="xulydiachi.php" method="POST" onsubmit="return validateAddrForm(event)">
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="redirect" value="<?= isset($_GET['redirect']) ? htmlspecialchars($_GET['redirect']) : 'profile' ?>">
-                    <div class="addr-row">
-                        <div class="form-group"><label>Tên người nhận *</label><input type="text" name="receiver_name" required></div>
-                        <div class="form-group"><label>Số điện thoại *</label><input type="tel" name="receiver_phone" id="addrPhone" required maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-                    </div>
-                    <div class="addr-row">
-                        <div class="form-group">
-                            <label>Tỉnh/TP *</label>
-                            <select id="tinh-addr" name="tinh" required onchange="loadQuanAddr()"><option value="">-- Chọn Tỉnh/TP --</option></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Quận/Huyện *</label>
-                            <select id="quan-addr" name="quan" required onchange="loadPhuongAddr()"><option value="">-- Chọn Quận/Huyện --</option></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Phường/Xã *</label>
-                            <select id="phuong-addr" name="phuong" required><option value="">-- Chọn Phường/Xã --</option></select>
-                        </div>
-                    </div>
-                    <div class="addr-row">
-                        <div class="form-group" style="flex:100%;">
-                            <label>Số nhà, tên đường *</label><input type="text" name="detail_address" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label><input type="checkbox" name="is_default" value="1"> Đặt làm địa chỉ mặc định</label>
-                    </div>
-                    <button type="submit" class="btn-save">Thêm địa chỉ</button>
-                </form>
-            </div>
-
-            <?php if (empty($addresses)): ?>
-                <p style="color:#999;">Bạn chưa lưu địa chỉ nào.</p>
-            <?php else: ?>
-                <?php foreach ($addresses as $addr): ?>
-                <div class="address-card">
-                    <p><strong><?= htmlspecialchars($addr['ReceiverName']) ?></strong> | <?= htmlspecialchars($addr['ReceiverPhone']) ?></p>
-                    <p><?= htmlspecialchars($addr['DiaChiDay']) ?>, <?= htmlspecialchars($addr['PhuongXa']) ?>, <?= htmlspecialchars($addr['QuanHuyen']) ?>, <?= htmlspecialchars($addr['TinhTP']) ?></p>
-                    <?php if ($addr['IsDefault'] == 1): ?><span class="badge-default">Mặc định</span><?php endif; ?>
-                    <form action="xulydiachi.php" method="POST" id="form-xoa-addr-<?= $addr['AddressID'] ?>">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="address_id" value="<?= $addr['AddressID'] ?>">
-                        <button type="button" class="btn-xoa-addr" onclick="confirmXoaAddr(<?= $addr['AddressID'] ?>)">Xoá</button>
-                    </form>
-                </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-
         <?php elseif ($tab == 'orders'): ?>
             <h2>Đơn đặt hàng</h2>
             <?php if (empty($orders)): ?>
@@ -128,15 +76,25 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
             <?php else: ?>
                 <table class="order-table">
                     <thead>
-                        <tr><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th><th>Chi tiết</th></tr>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Chi tiết</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($orders as $o): ?>
                         <tr>
+                            <td><strong>#<?= $o['OrderID'] ?></strong></td>
                             <td><?= $o['NgayDat'] ? date('d/m/Y H:i', strtotime($o['NgayDat'])) : '---' ?></td>
-                            <td><?= number_format($o['TongTien'],0,',','.') ?> đ</td>
+                            <td><?= number_format($o['TongTien'], 0, ',', '.') ?> đ</td>
                             <td>
-                                <?php $c = (mb_strtolower(trim($o['TrangThai'])) === 'da huy' || mb_strtolower(trim($o['TrangThai'])) === 'hủy') ? '#e74c3c' : '#f39c12'; ?>
+                                <?php
+                                $tt = mb_strtolower(trim($o['TrangThai']));
+                                $c  = ($tt === 'da huy' || $tt === 'hủy') ? '#e74c3c' : '#f39c12';
+                                ?>
                                 <span class="tt-tag" style="background:<?= $c ?>;"><?= htmlspecialchars($o['TrangThai']) ?></span>
                             </td>
                             <td><a href="chitietdonhang.php?id=<?= $o['OrderID'] ?>" class="btn-xemct">Xem chi tiết</a></td>
@@ -149,20 +107,8 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<div id="modal-xoa-addr" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
-    <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.3); text-align:center; max-width:400px; width:90%; border-top: 5px solid #e74c3c;">
-        <h3 style="color:#2c1a0e; margin:0 0 10px 0; font-size:20px;">Xác nhận xoá</h3>
-        <p style="color:#555; margin-bottom:25px; font-size:15px; line-height:1.5;">Bạn có chắc chắn muốn xoá địa chỉ này không?</p>
-        <div style="display:flex; gap:12px; justify-content:center;">
-            <button id="btn-confirm-xoa" style="background:#e74c3c; color:white; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Có</button>
-            <button onclick="document.getElementById('modal-xoa-addr').style.display='none'" style="background:#eee; color:#333; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Không</button>
-        </div>
-    </div>
-</div>
-
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
-<script src="assets/js/address.js"></script>
 <script src="assets/js/popup.js"></script>
 </body>
 </html>

@@ -17,44 +17,47 @@ if ($checkoutType === 'buynow') {
 }
 
 if (empty($cart)) {
-    header("Location: thanhtoan.php?error=" . urlencode("Giỏ hàng trống hoặc không có sản phẩm!"));
+    header("Location: thanhtoan.php?error=" . urlencode("Giỏ hàng trống!"));
     exit();
 }
 
-$hoTen     = trim($_POST['HoTen'] ?? '');
-$phone     = trim($_POST['Phone'] ?? '');
-$diaChiDay = trim($_POST['DiaChiDay'] ?? '');
-$phuong    = trim($_POST['PhuongXa'] ?? '');
-$quan      = trim($_POST['QuanHuyen'] ?? '');
-$tinh      = trim($_POST['TinhTP'] ?? '');
-$email     = trim($_POST['Email'] ?? '');
-$ghiChu    = trim($_POST['GhiChu'] ?? '');
+$hoTen = trim($_POST['HoTen'] ?? '');
+$phone = trim($_POST['Phone'] ?? '');
+
+if (empty($hoTen) || empty($phone)) {
+    header("Location: thanhtoan.php?error=" . urlencode("Vui lòng điền đầy đủ thông tin giao hàng!"));
+    exit();
+}
+
+if (strlen($phone) < 10) {
+    header("Location: thanhtoan.php?error=" . urlencode("Số điện thoại phải đủ 10 chữ số!"));
+    exit();
+}
 
 try {
     $conn->beginTransaction();
 
-    // Lấy giá chuẩn từ Database và tự tính tổng tiền 
     $tongTien = 0;
     $ids = implode(',', array_map('intval', array_keys($cart)));
-    $stmtbooks = $conn->query("SELECT BookID, Price FROM books WHERE BookID IN ($ids)");
+    $stmtBooks = $conn->query("SELECT BookID, Price FROM books WHERE BookID IN ($ids)");
     $booksDB = [];
-    while ($row = $stmtbooks->fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $stmtBooks->fetch(PDO::FETCH_ASSOC)) {
         $booksDB[$row['BookID']] = $row['Price'];
     }
 
     foreach ($cart as $bookID => $item) {
-        $soLuong = $item['slg'] ?? 1;
-        $donGia  = $booksDB[$bookID] ?? 0;
+        $soLuong   = $item['slg'] ?? 1;
+        $donGia    = $booksDB[$bookID] ?? 0;
         $tongTien += ($donGia * $soLuong);
     }
 
-    $sqlOrder = "INSERT INTO orders (UserID, TongTien, TrangThai, HoTen, Phone, DiaChiDay, PhuongXa, QuanHuyen, TinhTP, Email, GhiChu) 
-                 VALUES (?, ?, 'Chờ xác nhận', ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sqlOrder = "INSERT INTO orders (UserID, TongTien, TrangThai, HoTen, Phone)
+                 VALUES (?, ?, 'Chờ xác nhận', ?, ?)";
     $stmtOrder = $conn->prepare($sqlOrder);
-    $stmtOrder->execute([$userID, $tongTien, $hoTen, $phone, $diaChiDay, $phuong, $quan, $tinh, $email, $ghiChu]);
+    $stmtOrder->execute([$userID, $tongTien, $hoTen, $phone]);
     $orderID = $conn->lastInsertId();
 
-    $sqlDetail = "INSERT INTO orderdetails (OrderID, BookID, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
+    $sqlDetail  = "INSERT INTO orderdetails (OrderID, BookID, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
     $stmtDetail = $conn->prepare($sqlDetail);
     foreach ($cart as $bookID => $item) {
         $soLuong = $item['slg'] ?? 1;
@@ -70,7 +73,7 @@ try {
         unset($_SESSION['cart']);
     }
 
-    header("Location: index.php?success=" . urlencode("Đặt hàng thành công."));
+    header("Location: index.php?success=" . urlencode("Đặt hàng thành công!"));
     exit();
 
 } catch (PDOException $e) {
