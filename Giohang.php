@@ -6,35 +6,15 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-if (isset($_POST['action']) && isset($_POST['BookID'])) {
-    $BookID = (int)$_POST['BookID'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+    $BookID = (int)($_POST['BookID'] ?? 0);
+    $action = $_POST['action'];
 
-    switch ($_POST['action']) {
-        case 'increase':
-            if (isset($_SESSION['cart'][$BookID])) {
-                $_SESSION['cart'][$BookID]['slg']++;
-            }
-            break;
-        case 'decrease':
-            if (isset($_SESSION['cart'][$BookID])) {
-                $_SESSION['cart'][$BookID]['slg']--;
-                if ($_SESSION['cart'][$BookID]['slg'] <= 0) {
-                    unset($_SESSION['cart'][$BookID]);
-                }
-            }
-            break;
-        case 'delete':
-            unset($_SESSION['cart'][$BookID]);
-            break;
-        case 'xoa-het':
-            $_SESSION['cart'] = [];
-            // Điều hướng kèm thông báo thành công
-            header("Location: giohang.php?success=" . urlencode(""));
-            exit();
+    if ($action === 'xoa-het') {
+        $_SESSION['cart'] = [];
+        header("Location: giohang.php?success=" . urlencode("Đã dọn sạch giỏ hàng!"));
+        exit();
     }
-
-    header("Location: giohang.php");
-    exit();
 }
 
 $TongTien = 0;
@@ -74,68 +54,63 @@ if (!empty($_SESSION['cart'])) {
 <?php include 'components/navbar.php'; ?>
 
 <main class="main-content">
-    <h1> Giỏ Hàng</h1>
+    <h1>Giỏ Hàng</h1>
 
     <?php if (empty($items)): ?>
         <div class="empty-cart">
-            <span class="empty-icon"></span>
             <p>Giỏ hàng trống!</p>
-            <a href="index.php" class="btn-thanhtoan"> Tiếp tục mua sắm</a>
+            <a href="index.php" class="btn-thanhtoan">Tiếp tục mua sắm</a>
         </div>
-
     <?php else: ?>
         <table class="cart-table">
             <thead>
                 <tr>
-                    <th>Ảnh</th><th>Tên sách</th><th>Tác giả</th>
-                    <th>Đơn giá</th><th>Số lượng</th><th>Thành tiền</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($items as $item): ?>
-                <tr>
+                <tr class="cart-item" data-id="<?= $item['BookID'] ?>">
                     <td>
-                        <img src="assets/images/<?php echo htmlspecialchars($item['ImageURL'] ?? 'book-default.jpg'); ?>"
-                             onerror="this.src='assets/images/book-default.jpg'" alt="book">
+                        <img src="assets/images/<?= htmlspecialchars($item['ImageURL'] ?? 'book-default.jpg') ?>" 
+                             onerror="this.src='assets/images/book-default.jpg'" width="50">
                     </td>
-                    <td><?php echo htmlspecialchars($item['Title']); ?></td>
-                    <td><?php echo htmlspecialchars($item['Author']); ?></td>
-                    <td><?php echo number_format($item['Price'], 0, ',', '.'); ?> đ</td>
                     <td>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="BookID" value="<?php echo $item['BookID']; ?>">
-                            <div class="qty-box">
-                                <button type="submit" name="action" value="decrease">−</button>
-                                <span><?php echo $item['slg']; ?></span>
-                                <button type="submit" name="action" value="increase">+</button>
-                            </div>
-                        </form>
+                        <strong><?= htmlspecialchars($item['Title']) ?></strong><br>
+                        <small><?= htmlspecialchars($item['Author']) ?></small>
                     </td>
-                    <td class="thanh-tien"><?php echo number_format($item['ThanhTien'], 0, ',', '.'); ?> đ</td>
-                    
+                    <td><?= number_format($item['Price'], 0, ',', '.') ?> đ</td>
+                    <td>
+                        <div class="qty-box">
+                            <button type="button" class="btn-qty-ajax" data-id="<?= $item['BookID'] ?>" data-action="decrease">−</button>
+                            <span class="qty-display"><?= $item['slg'] ?></span>
+                            <button type="button" class="btn-qty-ajax" data-id="<?= $item['BookID'] ?>" data-action="increase">+</button>
+                        </div>
+                    </td>
+                    <td class="subtotal-display">
+                        <?= number_format($item['ThanhTien'], 0, ',', '.') ?> đ
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
 
         <div class="tong-tien-box">
-            <p>Tổng tiền: <span><?php echo number_format($TongTien, 0, ',', '.'); ?> đ</span></p>
+            <p>Tổng cộng: <span class="total-all-display"><?= number_format($TongTien, 0, ',', '.') ?> đ</span></p>
         </div>
 
         <div class="btn-group">
-            <div>
-                <!-- Form đã bỏ onclick, bấm là submit gọi PHP xử lý luôn -->
-                <form method="POST" style="display:inline;" id="form-xoa-het">
-                    <input type="hidden" name="BookID" value="0">
-                    <input type="hidden" name="action" value="xoa-het">
-                    <button type="submit" class="btn-xoa" style="padding:10px 20px;">
-                         Xoá tất cả
-                    </button>
-                </form>
-            </div>
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="xoa-het">
+                <button type="submit" class="btn-xoa">Xoá tất cả</button>
+            </form>
             <div style="display:flex; gap:10px;">
-                <a href="index.php" class="btn-tieptuc">← Tiếp tục mua sắm</a>
-                <a href="thanhtoan.php" class="btn-thanhtoan">Thanh toán →</a>
+                <a href="index.php" class="btn-tieptuc">Tiếp tục mua sắm</a>
+                <a href="thanhtoan.php" class="btn-thanhtoan">Thanh toán</a>
             </div>
         </div>
     <?php endif; ?>
@@ -143,6 +118,9 @@ if (!empty($_SESSION['cart'])) {
 
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
+
+<script src="assets/js/popup.js"></script>
+<script src="assets/js/cart.js"></script>
 
 </body>
 </html>

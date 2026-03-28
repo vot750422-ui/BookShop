@@ -7,6 +7,7 @@ require_once 'config.php';
 <head>
     <meta charset="UTF-8">
     <title>BookStore</title>
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/index.css">
 </head>
@@ -17,21 +18,6 @@ require_once 'config.php';
 <main class="main-content">
 
     <?php
-    $theLoaiMap = [
-        'tieu-thuyet'     => 'Tiểu Thuyết',
-        'truyen-ngan'     => 'Truyện Ngắn',
-        'co-dien'         => 'Văn Học Cổ Điển',
-        'kinh-di'         => 'Kinh Dị',
-        'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
-        'ky-nang-song'    => 'Kỹ Năng Sống',
-        'but-bi'          => 'Bút Bi',
-        'but-chi'         => 'Bút Chì',
-        'but-da-quang'    => 'Bút Dạ Quang',
-        'vo-o-ly'         => 'Vở Ô Li',
-        'so-tay'          => 'Sổ Tay',
-        'giay-note'       => 'Giấy Note',
-    ];
-
     $theLoai    = $_GET['theloai'] ?? '';
     $tenHienThi = $theLoaiMap[$theLoai] ?? '';
 
@@ -85,14 +71,5 @@ require_once 'config.php';
 <?php include 'components/alertpopup.php'; ?>
 <script src="assets/js/popup.js"></script>
 
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const successMsg = urlParams.get('success');
-    
-    if (successMsg) {
-        showPopup(successMsg, 'success');
-        window.history.replaceState(null, null, window.location.pathname);
-    }
-</script>
 </body>
 </html>

@@ -145,7 +145,20 @@
 }
 
 @media (max-width: 768px) {
-  .logo img {
-    height: 40px;
+  .mega-menu {
+    position: static;
+    min-width: 100% !important;
+    flex-direction: column;
+    box-shadow: none;
+    display: none;
+  }
+
+  .mega-left {
+    width: 100% !important;
+    border-right: none;
+  }
+
+  .mega-panel {
+    padding: 10px !important;
   }
 }

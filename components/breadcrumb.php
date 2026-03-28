@@ -1,18 +1,4 @@
 <?php
-$theLoaiMap = [
-    'tieu-thuyet'     => 'Tiểu Thuyết',
-    'truyen-ngan'     => 'Truyện Ngắn',
-    'co-dien'         => 'Văn Học Cổ Điển',
-    'kinh-di'         => 'Kinh Dị',
-    'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
-    'ky-nang-song'    => 'Kỹ Năng Sống',
-    'but-bi'          => 'Bút Bi',
-    'but-chi'         => 'Bút Chì',
-    'but-da-quang'    => 'Bút Dạ Quang',
-    'vo-o-ly'         => 'Vở Ô Li',
-    'so-tay'          => 'Sổ Tay',
-    'giay-note'       => 'Giấy Note',
-];
 $maTheLoai = $book['TheLoai'] ?? '';
 $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 ?>

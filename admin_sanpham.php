@@ -102,21 +102,7 @@ if (isset($_GET['sua'])) {
                     <select name="theloai" required>
                         <option value="">-- Chọn thể loại --</option>
                         <?php
-                        $theLoais = [
-                            'tieu-thuyet'     => 'Tiểu Thuyết',
-                            'truyen-ngan'     => 'Truyện Ngắn',
-                            'co-dien'         => 'Văn Học Cổ Điển',
-                            'kinh-di'         => 'Kinh Dị',
-                            'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
-                            'ky-nang-song'    => 'Kỹ Năng Sống',
-                            'but-bi'          => 'Bút Bi',
-                            'but-chi'         => 'Bút Chì',
-                            'but-da-quang'    => 'Bút Dạ Quang',
-                            'vo-o-ly'         => 'Vở Ô Li',
-                            'so-tay'          => 'Sổ Tay',
-                            'giay-note'       => 'Giấy Note',
-                        ];
-                        foreach ($theLoais as $val => $label) {
+                        foreach ($theLoaiMap as $val => $label) {
                             $selected = ($editBook['TheLoai'] ?? '') === $val ? 'selected' : '';
                             echo "<option value='{$val}' {$selected}>{$label}</option>";
                         }

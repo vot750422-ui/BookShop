@@ -24,20 +24,6 @@ try {
 }
 
 $imgSrc = 'assets/images/' . ($book['ImageURL'] ?? 'book-default.jpg');
-$theLoaiMap = [
-    'tieu-thuyet'     => 'Tiểu Thuyết',
-    'truyen-ngan'     => 'Truyện Ngắn',
-    'co-dien'         => 'Văn Học Cổ Điển',
-    'kinh-di'         => 'Kinh Dị',
-    'tam-ly-toi-pham' => 'Tâm Lý Học Tội Phạm',
-    'ky-nang-song'    => 'Kỹ Năng Sống',
-    'but-bi'          => 'Bút Bi',
-    'but-chi'         => 'Bút Chì',
-    'but-da-quang'    => 'Bút Dạ Quang',
-    'vo-o-ly'         => 'Vở Ô Li',
-    'so-tay'          => 'Sổ Tay',
-    'giay-note'       => 'Giấy Note',
-];
 $maTheLoai = $book['TheLoai'] ?? '';
 $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 ?>
@@ -108,23 +94,24 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 
 
         <div class="actions">
-            <form action="xulygiohang.php" method="POST">
+            <form id="form-add-to-cart" action="xulygiohang.php" method="POST">
                 <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
                 <input type="hidden" name="action" value="them">
+                <!-- Input này sẽ được cart.js tự động lấy giá trị từ ô #qty -->
                 <input type="hidden" name="qty" id="qty-them" value="1">
-                <button type="submit" class="cart-btn" onclick="syncQty('qty-them')">
+                <button type="submit" class="cart-btn">
                     Thêm vào giỏ hàng
                 </button>
             </form>
 
             <form action="xulygiohang.php" method="POST">
-    <input type="hidden" name="BookID"   value="<?php echo $book['BookID']; ?>">
-    <input type="hidden" name="action"   value="muangay">
-    <input type="hidden" name="qty"      id="qty-mua" value="1">
-    <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
-        Mua ngay
-    </button>
-</form>
+                <input type="hidden" name="BookID" value="<?php echo $book['BookID']; ?>">
+                <input type="hidden" name="action" value="muangay">
+                <input type="hidden" name="qty" id="qty-mua" value="1">
+                <button type="submit" class="buy-btn" onclick="syncQty('qty-mua')">
+                    Mua ngay
+                </button>
+            </form>
         </div>
     </div>
 </div>
@@ -171,35 +158,29 @@ $tenTheLoai = $theLoaiMap[$maTheLoai] ?? 'Khác';
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
 
+<script src="assets/js/popup.js"></script>
+<script src="assets/js/cart.js"></script>
+
 <script>
 function changeQty(delta) {
     const input = document.getElementById('qty');
-    const max   = parseInt(input.max) || 99;
+    const max = parseInt(input.max) || 99;
     let val = parseInt(input.value) + delta;
-    if (val < 1)   val = 1;
+    if (val < 1) val = 1;
     if (val > max) val = max;
     input.value = val;
+    
+    syncQty('qty-them');
+    syncQty('qty-mua');
 }
-
 
 function syncQty(hiddenId) {
     const visible = document.getElementById('qty');
-    const hidden  = document.getElementById(hiddenId);
+    const hidden = document.getElementById(hiddenId);
     if (visible && hidden) {
         hidden.value = visible.value;
     }
 }
-
-window.addEventListener('load', () => {
-    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'added'): ?>
-
-        showPopup('Đã thêm sản phẩm vào giỏ hàng!', 'success');
-        
-        const url = new URL(window.location);
-        url.searchParams.delete('msg');
-        window.history.replaceState(null, null, url);
-    <?php endif; ?>
-});
 </script>
 
 </body>

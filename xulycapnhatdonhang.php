@@ -46,7 +46,7 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->execute([$hoTen, $phone, $diaChiDay, $phuong, $quan, $tinh, $email, $ghiChu, $orderID, $userID]);
         
-        header("Location: chitietdonhang.php?id=$orderID&msg=updated");
+        header("Location: chitietdonhang.php?id=$orderID&success=Cập nhật đơn hàng thành công!");
         exit();
     } 
     
@@ -55,7 +55,7 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->execute([$orderID, $userID]);
         
-        header("Location: chitietdonhang.php?id=$orderID&msg=huyed");
+        header("Location: chitietdonhang.php?id=$orderID&success=Đơn hàng đã được huỷ thành công!");
         exit();
     }
 

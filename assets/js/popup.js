@@ -1,6 +1,3 @@
-/**
-Hiển thị thông báo popup góc trên phải
- */
 function showPopup(message, type = "success") {
   const old = document.getElementById("popup-notify");
   if (old) old.remove();
@@ -8,8 +5,6 @@ function showPopup(message, type = "success") {
   const colors = {
     success: { bg: "#16a34a", icon: "✓" },
     error: { bg: "#dc2626", icon: "✕" },
-    info: { bg: "#2563eb", icon: "ℹ" },
-    warning: { bg: "#d97706", icon: "⚠" },
   };
   const c = colors[type] || colors.success;
 
@@ -25,9 +20,6 @@ function showPopup(message, type = "success") {
     color: "#fff",
     padding: "12px 20px",
     borderRadius: "12px",
-    fontFamily: "sans-serif",
-    fontSize: "14px",
-    fontWeight: "500",
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -50,22 +42,29 @@ function showPopup(message, type = "success") {
     setTimeout(() => box.remove(), 300);
   }, 2800);
 }
+
 document.addEventListener("DOMContentLoaded", function () {
-  if (window.history && window.history.replaceState) {
-    const url = new URL(window.location.href);
+  const url = new URL(window.location.href);
 
-    const paramsToClear = ["msg", "error", "success", "updated", "huyed"];
-    let urlChanged = false;
+  if (url.searchParams.has("success"))
+    showPopup(url.searchParams.get("success"), "success");
+  else if (url.searchParams.has("error"))
+    showPopup(url.searchParams.get("error"), "error");
 
-    paramsToClear.forEach((param) => {
-      if (url.searchParams.has(param)) {
-        url.searchParams.delete(param);
-        urlChanged = true;
-      }
-    });
-
-    if (urlChanged) {
-      window.history.replaceState(null, "", url.toString());
+  const paramsToClear = ["msg", "error", "success"];
+  let urlChanged = false;
+  paramsToClear.forEach((param) => {
+    if (url.searchParams.has(param)) {
+      url.searchParams.delete(param);
+      urlChanged = true;
     }
+  });
+
+  if (urlChanged && window.history.replaceState) {
+    window.history.replaceState(
+      null,
+      "",
+      url.pathname + (url.search ? "?" + url.searchParams.toString() : ""),
+    );
   }
 });

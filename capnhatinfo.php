@@ -2,26 +2,39 @@
 session_start();
 require_once 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
-    $userID    = $_SESSION['user_id'];
-    $fullname  = trim($_POST['fullname'] ?? '');
-    $phone     = trim($_POST['phone'] ?? '');
-    $birthdate = trim($_POST['birthdate'] ?? '');
+if (!isset($_SESSION['user_id'])) {
+    header("Location: dangnhap.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userID = $_SESSION['user_id'];
+    $fullName = trim($_POST['fullname'] ?? '');
+    $phone = trim($_POST['Phone'] ?? $_POST['phone'] ?? '');
+    $birthDate = trim($_POST['birthdate'] ?? '');
+
+    if (empty($fullName) || empty($phone)) {
+        header("Location: profile.php?tab=info&error=" . urlencode("Vui lòng nhập đầy đủ thông tin!"));
+        exit();
+    }
+
+    if (strlen($phone) < 10) {
+        header("Location: profile.php?tab=info&error=" . urlencode("Số điện thoại không hợp lệ!"));
+        exit();
+    }
 
     try {
         $stmt = $conn->prepare("UPDATE users SET FullName = ?, Phone = ?, BirthDate = ? WHERE UserID = ?");
-        $stmt->execute([$fullname, $phone, $birthdate, $userID]);
-
-
-        $_SESSION['user_name'] = $fullname;
-
-        header("Location: profile.php?tab=info&msg=ok");
+        $stmt->execute([$fullName, $phone, $birthDate, $userID]);
+        
+        header("Location: profile.php?tab=info&success=" . urlencode("Cập nhật thông tin thành công!"));
         exit();
     } catch (PDOException $e) {
-        header("Location: profile.php?tab=info&msg=error");
+        header("Location: profile.php?tab=info&error=" . urlencode("Lỗi hệ thống!"));
         exit();
     }
 } else {
-    header("Location: index.php");
+    header("Location: profile.php");
     exit();
 }
+?>

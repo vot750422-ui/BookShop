@@ -1,75 +1,85 @@
 /* ================= DANG KY PAGE ================= */
 
 .dangky-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    background: aliceblue;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: aliceblue;
 }
 
 .dangky-container {
-    width: 500px;
-    border: 1px solid #ccc;
-    padding: 30px;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  border: 1px solid #ccc;
+  padding: 30px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .dangky-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #0f3a63;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0f3a63;
 }
 
 .dangky-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .btn-dangky {
-    width: 100%;
-    background-color: orangered;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
+  width: 100%;
+  background-color: orangered;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .btn-dangky:hover {
-    background: #716f6f;
+  background: #716f6f;
 }
 
 .dangky-container p {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
 }
 
 .dangky-container a {
-    color: orangered;
-    text-decoration: none;
+  color: orangered;
+  text-decoration: none;
 }
 
 .dangky-container a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 540px) {
-    .dangky-container {
-        width: 100%;
-        padding: 20px;
-    }
+  .dangky-container,
+  .login-container {
+    width: 95% !important;
+    padding: 20px 15px !important;
+    margin: 0 auto;
+  }
+
+  .login-container h2 {
+    font-size: 20px;
+  }
+
+  input {
+    font-size: 16px !important;
+    padding: 12px !important;
+  }
 }

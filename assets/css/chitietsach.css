@@ -216,15 +216,29 @@
   font-size: 14px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .book-detail {
-    padding: 20px;
+    flex-direction: column;
+    padding: 15px !important;
+    gap: 20px !important;
   }
-  .book-description {
-    padding: 20px;
-  }
+
   .book-gallery {
-    flex: 0 0 100%;
+    flex: 0 0 100% !important;
+  }
+
+  .main-img {
+    height: auto !important;
+    max-height: 400px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .cart-btn,
+  .buy-btn {
+    width: 100%;
+    padding: 15px !important;
   }
 }

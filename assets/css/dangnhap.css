@@ -66,10 +66,20 @@
   text-decoration: underline;
 }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 540px) {
   .login-container {
-    width: 100%;
-    padding: 20px;
+    width: 95% !important;
+    padding: 20px 15px !important;
+    margin: 0 auto;
+  }
+
+  .dangky-container h2,
+  .login-container h2 {
+    font-size: 20px;
+  }
+
+  input {
+    font-size: 16px !important;
+    padding: 12px !important;
   }
 }

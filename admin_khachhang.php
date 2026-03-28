@@ -39,7 +39,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h1>Quản lý khách hàng</h1>
 
     <div class="customer-box">
-        <a href="them_user.php" class="btn-add-customer">+ Thêm khách hàng</a>
 
         <table class="customer-table">
             <thead>

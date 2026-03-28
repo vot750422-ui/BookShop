@@ -44,9 +44,7 @@ if ($userID) {
         $stmt->execute([$userID]);
         $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmtAddr = $conn->prepare(
-            "SELECT * FROM useraddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC"
-        );
+        $stmtAddr = $conn->prepare("SELECT * FROM useraddresses WHERE UserID = ? ORDER BY IsDefault DESC, AddressID DESC");
         $stmtAddr->execute([$userID]);
         $addresses = $stmtAddr->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {}
@@ -72,7 +70,6 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
     <title>Thanh Toan - BookStore</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/thanhtoan.css">
-    
 </head>
 <body>
 
@@ -86,8 +83,8 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
         <div class="alert alert-error"><?= htmlspecialchars($_GET['error']) ?></div>
     <?php endif; ?>
 
-    <form action="xulythanhtoan.php" method="POST" onsubmit="return validateForm()">
-    <input type="hidden" name="checkout_type" value="<?= isset($_GET['type']) && $_GET['type'] === 'buynow' ? 'buynow' : 'cart' ?>">
+    <form action="xulythanhtoan.php" method="POST" onsubmit="return validateForm(event)">
+        <input type="hidden" name="checkout_type" value="<?= isset($_GET['type']) && $_GET['type'] === 'buynow' ? 'buynow' : 'cart' ?>">
 
         <div class="info-box">
             <h3>Thong tin nguoi nhan</h3>
@@ -108,12 +105,12 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
                     <div class="addr-list" id="addrList">
                         <?php foreach ($addresses as $addr): ?>
                         <div class="addr-item"
-                             data-name="<?=   htmlspecialchars($addr['ReceiverName'])  ?>"
-                             data-phone="<?=  htmlspecialchars($addr['ReceiverPhone']) ?>"
-                             data-diachi="<?= htmlspecialchars($addr['DiaChiDay'])     ?>"
-                             data-phuong="<?= htmlspecialchars($addr['PhuongXa'])      ?>"
-                             data-quan="<?=   htmlspecialchars($addr['QuanHuyen'])     ?>"
-                             data-tinh="<?=   htmlspecialchars($addr['TinhTP'])        ?>"
+                             data-name="<?= htmlspecialchars($addr['ReceiverName']) ?>"
+                             data-phone="<?= htmlspecialchars($addr['ReceiverPhone']) ?>"
+                             data-diachi="<?= htmlspecialchars($addr['DiaChiDay']) ?>"
+                             data-phuong="<?= htmlspecialchars($addr['PhuongXa']) ?>"
+                             data-quan="<?= htmlspecialchars($addr['QuanHuyen']) ?>"
+                             data-tinh="<?= htmlspecialchars($addr['TinhTP']) ?>"
                              onclick="chonDiaChi(this)">
                             <strong>
                                 <?= htmlspecialchars($addr['ReceiverName']) ?>
@@ -143,7 +140,6 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
                 <?php endif; ?>
             <?php endif; ?>
 
-            <!-- Hien thi dia chi da chon -->
             <div id="selected-addr-display" style="<?= $defaultAddr ? '' : 'display:none;' ?>">
                 <div class="selected-addr-box" id="selected-addr-box">
                     <?php if ($defaultAddr): ?>
@@ -157,48 +153,40 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
                 </div>
             </div>
 
-            <!-- Input hidden -->
-            <input type="hidden" name="HoTen"     id="HoTen"     value="<?= htmlspecialchars($preHoTen) ?>">
-            <input type="hidden" name="Phone"     id="Phone"     value="<?= htmlspecialchars($prePhone) ?>">
+            <input type="hidden" name="HoTen" id="HoTen" value="<?= htmlspecialchars($preHoTen) ?>">
+            <input type="hidden" name="Phone" id="Phone" value="<?= htmlspecialchars($prePhone) ?>">
             <input type="hidden" name="DiaChiDay" id="DiaChiDay" value="<?= htmlspecialchars($preDiaChi) ?>">
-            <input type="hidden" name="PhuongXa"  id="PhuongXa"  value="<?= htmlspecialchars($prePhuong) ?>">
+            <input type="hidden" name="PhuongXa" id="PhuongXa" value="<?= htmlspecialchars($prePhuong) ?>">
             <input type="hidden" name="QuanHuyen" id="QuanHuyen" value="<?= htmlspecialchars($preQuan) ?>">
-            <input type="hidden" name="TinhTP"    id="TinhTP"    value="<?= htmlspecialchars($preTinh) ?>">
+            <input type="hidden" name="TinhTP" id="TinhTP" value="<?= htmlspecialchars($preTinh) ?>">
 
             <?php if (!$userID): ?>
-            <!-- Khach vang lai nhap tay -->
             <div class="form-row">
                 <div class="form-group">
                     <label>Ho ten *</label>
-                    <input type="text" required placeholder="Nhap ho ten..."
-                           oninput="document.getElementById('HoTen').value=this.value">
+                    <input type="text" required placeholder="Nhap ho ten..." oninput="document.getElementById('HoTen').value=this.value">
                 </div>
                 <div class="form-group">
                     <label>So dien thoai *</label>
-                    <input type="text" required placeholder="Nhap so dien thoai..."
-                           oninput="document.getElementById('Phone').value=this.value">
+                    <input type="tel" required maxlength="10" placeholder="Nhap so dien thoai..." oninput="this.value = this.value.replace(/[^0-9]/g, ''); document.getElementById('Phone').value=this.value;">
                 </div>
             </div>
             <div class="form-group">
                 <label>So nha, ten duong *</label>
-                <input type="text" required placeholder="So nha, ten duong..."
-                       oninput="document.getElementById('DiaChiDay').value=this.value">
+                <input type="text" required placeholder="So nha, ten duong..." oninput="document.getElementById('DiaChiDay').value=this.value">
             </div>
             <div class="form-row three-col">
                 <div class="form-group">
                     <label>Tinh/TP *</label>
-                    <input type="text" required placeholder="Tinh/TP..."
-                           oninput="document.getElementById('TinhTP').value=this.value">
+                    <input type="text" required placeholder="Tinh/TP..." oninput="document.getElementById('TinhTP').value=this.value">
                 </div>
                 <div class="form-group">
                     <label>Quan/Huyen *</label>
-                    <input type="text" required placeholder="Quan/Huyen..."
-                           oninput="document.getElementById('QuanHuyen').value=this.value">
+                    <input type="text" required placeholder="Quan/Huyen..." oninput="document.getElementById('QuanHuyen').value=this.value">
                 </div>
                 <div class="form-group">
                     <label>Phuong/Xa *</label>
-                    <input type="text" required placeholder="Phuong/Xa..."
-                           oninput="document.getElementById('PhuongXa').value=this.value">
+                    <input type="text" required placeholder="Phuong/Xa..." oninput="document.getElementById('PhuongXa').value=this.value">
                 </div>
             </div>
             <?php endif; ?>
@@ -212,7 +200,6 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
                 <textarea name="GhiChu" rows="3" placeholder="Ghi chu them cho don hang..."></textarea>
             </div>
         </div>
-
 
         <div class="info-box">
             <h3>San pham da chon</h3>
@@ -230,9 +217,7 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
                     <tr>
                         <td>
                             <div class="product-cell">
-                                <img src="assets/images/<?= htmlspecialchars($item['ImageURL']) ?>"
-                                     onerror="this.src='assets/images/book-default.jpg'"
-                                     alt="<?= htmlspecialchars($item['Title']) ?>">
+                                <img src="assets/images/<?= htmlspecialchars($item['ImageURL']) ?>" onerror="this.src='assets/images/book-default.jpg'" alt="<?= htmlspecialchars($item['Title']) ?>">
                                 <span><?= htmlspecialchars($item['Title']) ?></span>
                             </div>
                         </td>
@@ -249,8 +234,6 @@ $preTinh   = $defaultAddr['TinhTP']        ?? '';
             <h3>Tong tien</h3>
             <p class="tong-tien"><?= number_format($tongTien,0,',','.') ?> VND</p>
         </div>
-
-        <input type="hidden" name="tongTien" value="<?= $tongTien ?>">
         <?php if ($userID): ?>
             <input type="hidden" name="userID" value="<?= $userID ?>">
         <?php endif; ?>
@@ -282,16 +265,14 @@ if (addrDropBtn) {
 }
 
 function chonDiaChi(el) {
-    document.getElementById('HoTen').value    = el.dataset.name;
-    document.getElementById('Phone').value    = el.dataset.phone;
+    document.getElementById('HoTen').value = el.dataset.name;
+    document.getElementById('Phone').value = el.dataset.phone;
     document.getElementById('DiaChiDay').value = el.dataset.diachi;
-    document.getElementById('PhuongXa').value  = el.dataset.phuong;
+    document.getElementById('PhuongXa').value = el.dataset.phuong;
     document.getElementById('QuanHuyen').value = el.dataset.quan;
-    document.getElementById('TinhTP').value    = el.dataset.tinh;
+    document.getElementById('TinhTP').value = el.dataset.tinh;
 
-    document.getElementById('addrDropLabel').textContent =
-        el.dataset.name + ' - ' + el.dataset.diachi + ', ' +
-        el.dataset.phuong + ', ' + el.dataset.quan + ', ' + el.dataset.tinh;
+    document.getElementById('addrDropLabel').textContent = el.dataset.name + ' - ' + el.dataset.diachi + ', ' + el.dataset.phuong + ', ' + el.dataset.quan + ', ' + el.dataset.tinh;
 
     document.getElementById('selected-addr-box').innerHTML = `
         <p><strong>${el.dataset.name}</strong> | ${el.dataset.phone}</p>
@@ -303,13 +284,23 @@ function chonDiaChi(el) {
     addrList.classList.remove('open');
 }
 
-function validateForm() {
+function validateForm(event) {
+    const phone = document.getElementById('Phone').value.trim();
+    
+    if (phone.length > 0 && phone.length < 10) {
+        event.preventDefault();
+        showPopup('Số điện thoại phải đủ 10 chữ số!', 'error');
+        return false;
+    }
+
     <?php if ($userID): ?>
     if (!document.getElementById('HoTen').value.trim()) {
+        event.preventDefault();
         showPopup('Vui long chon dia chi giao hang!', 'error');
         return false;
     }
     if (!document.getElementById('TinhTP').value.trim()) {
+        event.preventDefault();
         showPopup('Dia chi chua day du! Vui long chon lai.', 'error');
         return false;
     }

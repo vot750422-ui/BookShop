@@ -117,24 +117,6 @@ body {
   background: #c9a96e;
 }
 
-/* Nút thêm khách hàng */
-.btn-add-customer {
-  display: inline-block;
-  background: #2c1a0e;
-  color: #f0e6d3;
-  padding: 10px 20px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.2s;
-  margin-bottom: 15px;
-}
-
-.btn-add-customer:hover {
-  background: #c9a96e;
-}
-
 /* ===== STATUS ===== */
 .status {
   padding: 5px 10px;

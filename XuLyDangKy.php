@@ -8,21 +8,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email      = trim($_POST['email'] ?? '');
     $birthDate  = trim($_POST['birthdate'] ?? '');
     $password   = $_POST['password'] ?? '';
-    $rePassword = $_POST['re-password'] ?? '';
     $phone      = trim($_POST['phone'] ?? '');
 
-    if (empty($fullName) || empty($email) || empty($password)) {
+    if (empty($fullName) || empty($email) || empty($password) || empty($phone)) {
         header("Location: dangky.php?error=" . urlencode("Vui lòng nhập đầy đủ thông tin bắt buộc!"));
+        exit();
+    }
+
+    if (strlen($phone) < 10) {
+        header("Location: dangky.php?error=" . urlencode("Số điện thoại không hợp lệ!"));
         exit();
     }
 
     if (strlen($password) < 6) {
         header("Location: dangky.php?error=" . urlencode("Mật khẩu phải từ 6 ký tự trở lên!"));
-        exit();
-    }
-
-    if ($password !== $rePassword) {
-        header("Location: dangky.php?error=" . urlencode("Mật khẩu nhập lại không khớp!"));
         exit();
     }
 

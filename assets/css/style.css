@@ -347,147 +347,45 @@ body {
   margin-left: 4px;
 }
 
-/* ================= TABLET (768px - 1024px) ================= */
-@media (max-width: 1024px) {
-  .main-content {
-    padding: 30px 30px;
-  }
-  .topbar {
-    padding: 6px 30px;
-  }
-  .nav-top {
-    padding: 15px 30px;
-  }
-  .nav-bottom {
-    padding: 12px 30px;
-  }
-  .breadcrumb {
-    padding: 10px 30px;
-  }
-  .footer {
-    padding: 30px 30px 20px;
-  }
-  .book-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* ================= MOBILE (max 768px) ================= */
 @media (max-width: 768px) {
-  .main-content {
-    padding: 20px 16px;
-  }
-  .breadcrumb {
-    padding: 10px 16px;
-    font-size: 12px;
-  }
-
-  /* Topbar */
-  .topbar {
-    padding: 6px 16px;
-    font-size: 12px;
-  }
-  .topbar-right {
-    gap: 6px;
-  }
-
-  /* Nav top */
-  .nav-top {
-    padding: 12px 16px;
-    flex-wrap: wrap;
-    position: relative;
+  .nav-top,
+  .nav-bottom,
+  .main-content,
+  .breadcrumb,
+  .footer {
+    padding: 10px 15px !important;
   }
 
   .logo img {
-    height: 45px;
+    height: 40px !important;
   }
   .logo span {
-    font-size: 17px;
+    font-size: 16px !important;
   }
 
-  .hamburger {
-    display: flex;
-  }
-
-  .menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    gap: 0;
-    border-top: 1px solid #e8d9c0;
-    padding-top: 8px;
-  }
-
-  .menu.open {
-    display: flex;
-  }
-  .menu li {
-    border-bottom: 1px solid #e8d9c0;
-  }
-  .menu a {
-    display: block;
-    padding: 10px 0;
-    font-size: 14px;
-  }
-
-  /* Nav bottom */
   .nav-bottom {
     flex-direction: column;
-    padding: 12px 16px;
-    gap: 10px;
-    align-items: stretch;
+    gap: 8px;
   }
 
-  .category {
-    text-align: center;
-    padding: 6px 0;
-  }
   .search-box {
-    max-width: 100%;
     width: 100%;
+    order: 2;
   }
+
+  .category,
   .cart {
-    text-align: center;
-    padding: 4px 0;
-  }
-
-  /* Book grid: 2 cot */
-  .book-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  .book-card img {
-    height: 160px;
-  }
-  .book-card h3 {
-    font-size: 12px;
-    padding: 8px 8px 3px;
-  }
-  .book-card .price {
+    display: inline-block;
+    width: auto;
     font-size: 13px;
-    padding: 4px 8px 8px;
   }
 
-  /* Hien overlay mac dinh tren mobile */
-  .book-overlay {
-    transform: translateY(0);
-    background: rgba(44, 26, 14, 0.75);
-    font-size: 12px;
-    padding: 8px;
+  .book-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 
-  /* Footer */
-  .footer {
-    padding: 25px 16px 15px;
-  }
-  .footer-container {
-    flex-direction: column;
-    gap: 20px;
-  }
-  .footer-col {
-    min-width: unset;
-  }
-  .footer-logo {
-    width: 130px;
+  .book-card img {
+    height: 180px !important;
   }
 }

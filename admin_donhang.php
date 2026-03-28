@@ -56,7 +56,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Mã Đơn Hàng</th>
                 <th>Khách Hàng</th>
                 <th>Số Điện Thoại</th>
-                <th>ổng Tiền</th>
+                <th>Tổng Tiền</th>
                 <th>Ngày Đặt</th>
                 <th>Trạng Thái</th>
             </tr>

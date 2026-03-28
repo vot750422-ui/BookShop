@@ -31,19 +31,7 @@ if (isset($_SESSION['user_name'])) {
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
 <script src="assets/js/popup.js"></script>
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const errorMsg = urlParams.get('error');
-    const successMsg = urlParams.get('success');
-    
-    if (errorMsg) {
-        showPopup(errorMsg, 'error');
-        window.history.replaceState(null, null, window.location.pathname);
-    } else if (successMsg) {
-        showPopup(successMsg, 'success');
-        window.history.replaceState(null, null, window.location.pathname);
-    }
-</script>
+
 
 </body>
 </html>
