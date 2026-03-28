@@ -31,8 +31,7 @@
         </div>
         <ul class="menu">
             <li><a href="index.php">Trang chủ</a></li>
-            <li><a href="#">Tin tức</a></li>
-            <li><a href="#">Liên hệ</a></li>
+            
         </ul>
     </div>
 
