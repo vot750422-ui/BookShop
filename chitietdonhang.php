@@ -69,7 +69,7 @@ $displayTinh   = ($order['TinhTP']    ?? '') ?: ($defaultAddr['TinhTP']        ?
 <div class="order-detail-wrapper">
     <div class="order-detail-box">
         <div class="detail-header">
-            <h2>Đơn hàng #<?= $orderID ?></h2>
+            <h2>Đơn hàng?></h2>
             <span class="tt-tag" style="background:<?= $daHuy ? '#e74c3c' : '#f39c12' ?>;"><?= htmlspecialchars($trangThai) ?></span>
         </div>
 

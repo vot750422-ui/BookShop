@@ -116,7 +116,7 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
                     <form action="xulydiachi.php" method="POST" id="form-xoa-addr-<?= $addr['AddressID'] ?>">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="address_id" value="<?= $addr['AddressID'] ?>">
-                        <button type="button" class="btn-xoa-addr" onclick="confirmXoaAddr(<?= $addr['AddressID'] ?>)">Xoá</button>
+                        <button type="Submit" class="btn-xoa-addr" onclick="confirmXoaAddr(<?= $addr['AddressID'] ?>)">Xoá</button>
                     </form>
                 </div>
                 <?php endforeach; ?>
@@ -149,18 +149,6 @@ $addresses = $stmtAddress->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 </div>
-
-<div id="modal-xoa-addr" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
-    <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.3); text-align:center; max-width:400px; width:90%; border-top: 5px solid #e74c3c;">
-        <h3 style="color:#2c1a0e; margin:0 0 10px 0; font-size:20px;">Xác nhận xoá</h3>
-        <p style="color:#555; margin-bottom:25px; font-size:15px; line-height:1.5;">Bạn có chắc chắn muốn xoá địa chỉ này không?</p>
-        <div style="display:flex; gap:12px; justify-content:center;">
-            <button id="btn-confirm-xoa" style="background:#e74c3c; color:white; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Có</button>
-            <button onclick="document.getElementById('modal-xoa-addr').style.display='none'" style="background:#eee; color:#333; border:none; padding:12px 25px; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Không</button>
-        </div>
-    </div>
-</div>
-
 <?php include 'components/footer.html'; ?>
 <?php include 'components/alertpopup.php'; ?>
 <script src="assets/js/address.js"></script>
